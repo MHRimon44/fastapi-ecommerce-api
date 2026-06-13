@@ -50,3 +50,8 @@ class ProductListResponse(BaseModel):
     limit: int
     offset: int
     items: List[ProductResponse]
+
+
+class ProductCreateResponse(BaseModel):
+    message: str
+    data: ProductResponse

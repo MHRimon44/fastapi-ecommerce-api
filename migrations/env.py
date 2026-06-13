@@ -6,6 +6,8 @@ from sqlmodel import SQLModel
 
 from app.core.config import DATABASE_URL
 from app.models.product_model import Product
+from app.models.customer_model import Customer
+from app.models.order_model import Order, OrderItem
 
 config = context.config
 

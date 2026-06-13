@@ -6,6 +6,7 @@ from sqlmodel import Session
 from app.db.session import get_session
 from app.schemas.product_schema import (
     ProductCreateRequest,
+    ProductCreateResponse,
     ProductListResponse,
     ProductPatchRequest,
     ProductResponse,
@@ -13,6 +14,7 @@ from app.schemas.product_schema import (
     ProductUpdateRequest,
 )
 from app.services.product_service import product_service
+from app.schemas.common_schema import MessageResponse
 
 router = APIRouter(
     prefix="/products",
@@ -22,16 +24,20 @@ router = APIRouter(
 
 @router.post(
     "",
-    response_model=ProductResponse,
+    response_model=MessageResponse,
     status_code=status.HTTP_201_CREATED,
 )
 def create_product(
     request: ProductCreateRequest,
     session: Session = Depends(get_session),
 ):
-    return product_service.create_product(
+    product_service.create_product(
         session=session,
         request=request,
+    )
+
+    return MessageResponse(
+        message="Product created successfully",
     )
 
 
