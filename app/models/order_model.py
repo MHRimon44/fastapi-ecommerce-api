@@ -5,7 +5,7 @@ from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
     from app.models.customer_model import Customer
-
+    from app.models.payment_model import Payment
 
 class Order(SQLModel, table=True):
     __tablename__ = "orders"
@@ -19,7 +19,7 @@ class Order(SQLModel, table=True):
 
     customer: Optional["Customer"] = Relationship(back_populates="orders")
     items: List["OrderItem"] = Relationship(back_populates="order")
-
+    payments: List["Payment"] = Relationship(back_populates="order")
 
 class OrderItem(SQLModel, table=True):
     __tablename__ = "order_items"
