@@ -1,81 +1,134 @@
-from typing import Dict, List, Optional
+from typing import Optional
 
+from sqlalchemy import func
+from sqlmodel import Session, select
+
+from app.models.product_model import Product
 from app.schemas.product_schema import (
     ProductCreateRequest,
-    ProductResponse,
+    ProductPatchRequest,
+    ProductSortOption,
     ProductUpdateRequest,
 )
 
 
-class InMemoryProductRepository:
-    def __init__(self):
-        self._products_by_id: Dict[int, ProductResponse] = {}
-        self._ordered_product_ids: List[int] = []
-        self._next_product_id = 1
-
-    def create(self, request: ProductCreateRequest) -> ProductResponse:
-        product = ProductResponse(
-            product_id=self._next_product_id,
+class ProductRepository:
+    def create(
+        self,
+        session: Session,
+        request: ProductCreateRequest,
+    ) -> Product:
+        product = Product(
             product_name=request.product_name,
             price=request.price,
             stock_qty=request.stock_qty,
             description=request.description,
         )
 
-        self._products_by_id[product.product_id] = product
-        self._ordered_product_ids.append(product.product_id)
-        self._next_product_id += 1
+        session.add(product)
+        session.commit()
+        session.refresh(product)
 
         return product
 
-    def get_all(self) -> List[ProductResponse]:
-        return [
-            self._products_by_id[product_id]
-            for product_id in self._ordered_product_ids
-            if product_id in self._products_by_id
-        ]
+    def get_by_id(
+        self,
+        session: Session,
+        product_id: int,
+    ) -> Optional[Product]:
+        return session.get(Product, product_id)
 
-    def get_by_id(self, product_id: int) -> Optional[ProductResponse]:
-        return self._products_by_id.get(product_id)
+    def list_products(
+        self,
+        session: Session,
+        search: Optional[str],
+        min_price: Optional[float],
+        max_price: Optional[float],
+        limit: int,
+        offset: int,
+        sort: ProductSortOption,
+    ):
+        statement = select(Product)
+        count_statement = select(func.count()).select_from(Product)
+
+        if search:
+            normalized_search = search.lower().strip()
+            statement = statement.where(
+                func.lower(Product.product_name).like(f"%{normalized_search}%")
+            )
+            count_statement = count_statement.where(
+                func.lower(Product.product_name).like(f"%{normalized_search}%")
+            )
+
+        if min_price is not None:
+            statement = statement.where(Product.price >= min_price)
+            count_statement = count_statement.where(Product.price >= min_price)
+
+        if max_price is not None:
+            statement = statement.where(Product.price <= max_price)
+            count_statement = count_statement.where(Product.price <= max_price)
+
+        if sort == ProductSortOption.high_to_low:
+            statement = statement.order_by(Product.price.desc())
+
+        elif sort == ProductSortOption.low_to_high:
+            statement = statement.order_by(Product.price.asc())
+
+        elif sort == ProductSortOption.newly_added:
+            statement = statement.order_by(Product.product_id.desc())
+
+        else:
+            statement = statement.order_by(Product.product_id.asc())
+
+        total = session.exec(count_statement).one()
+
+        statement = statement.offset(offset).limit(limit)
+
+        items = session.exec(statement).all()
+
+        return total, items
 
     def update(
         self,
-        product_id: int,
+        session: Session,
+        product: Product,
         request: ProductUpdateRequest,
-    ) -> ProductResponse:
-        updated_product = ProductResponse(
-            product_id=product_id,
-            product_name=request.product_name,
-            price=request.price,
-            stock_qty=request.stock_qty,
-            description=request.description,
-        )
+    ) -> Product:
+        product.product_name = request.product_name
+        product.price = request.price
+        product.stock_qty = request.stock_qty
+        product.description = request.description
 
-        self._products_by_id[product_id] = updated_product
+        session.add(product)
+        session.commit()
+        session.refresh(product)
 
-        return updated_product
+        return product
 
     def patch(
         self,
-        product_id: int,
-        update_data: dict,
-    ) -> ProductResponse:
-        existing_product = self._products_by_id[product_id]
-        updated_product = existing_product.model_copy(update=update_data)
+        session: Session,
+        product: Product,
+        request: ProductPatchRequest,
+    ) -> Product:
+        update_data = request.model_dump(exclude_unset=True)
 
-        self._products_by_id[product_id] = updated_product
+        for field_name, field_value in update_data.items():
+            setattr(product, field_name, field_value)
 
-        return updated_product
+        session.add(product)
+        session.commit()
+        session.refresh(product)
 
-    def delete(self, product_id: int) -> None:
-        self._products_by_id.pop(product_id, None)
+        return product
 
-        if product_id in self._ordered_product_ids:
-            self._ordered_product_ids.remove(product_id)
+    def delete(
+        self,
+        session: Session,
+        product: Product,
+    ) -> None:
+        session.delete(product)
+        session.commit()
 
-    def reset(self) -> None:
-        self._products_by_id.clear()
-        self._ordered_product_ids.clear()
-        self._next_product_id = 1
-        
-product_repository = InMemoryProductRepository()
+
+product_repository = ProductRepository()

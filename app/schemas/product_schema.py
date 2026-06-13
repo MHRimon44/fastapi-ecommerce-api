@@ -1,8 +1,7 @@
 from enum import Enum
 from typing import Optional, List
 
-from pydantic import BaseModel, Field
-
+from pydantic import BaseModel, Field, ConfigDict
 
 class ProductSortOption(str, Enum):
     default = "default"
@@ -33,6 +32,8 @@ class ProductPatchRequest(BaseModel):
 
 
 class ProductResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     product_id: int
     product_name: str
     price: float

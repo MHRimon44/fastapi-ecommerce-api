@@ -1,6 +1,7 @@
-from typing import Optional, List
+from typing import Optional
 
 from fastapi import HTTPException, status
+from sqlmodel import Session
 
 from app.repositories.product_repository import product_repository
 from app.schemas.product_schema import (
@@ -14,22 +15,25 @@ from app.schemas.product_schema import (
 
 
 class ProductService:
-    def create_product(self, request: ProductCreateRequest) -> ProductResponse:
-        return product_repository.create(request)
+    def create_product(
+        self,
+        session: Session,
+        request: ProductCreateRequest,
+    ) -> ProductResponse:
+        product = product_repository.create(session, request)
+        return ProductResponse.model_validate(product)
 
-    def get_product_by_id(self, product_id: int) -> ProductResponse:
-        product = product_repository.get_by_id(product_id)
-
-        if product is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Product not found",
-            )
-
-        return product
+    def get_product_by_id(
+        self,
+        session: Session,
+        product_id: int,
+    ) -> ProductResponse:
+        product = self._get_product_or_404(session, product_id)
+        return ProductResponse.model_validate(product)
 
     def get_products(
         self,
+        session: Session,
         search: Optional[str],
         min_price: Optional[float],
         max_price: Optional[float],
@@ -43,56 +47,49 @@ class ProductService:
                 detail="min_price cannot be greater than max_price",
             )
 
-        filtered_products = product_repository.get_all()
-
-        if search:
-            normalized_search = search.lower().strip()
-            filtered_products = [
-                product
-                for product in filtered_products
-                if normalized_search in product.product_name.lower()
-            ]
-
-        if min_price is not None:
-            filtered_products = [
-                product
-                for product in filtered_products
-                if product.price >= min_price
-            ]
-
-        if max_price is not None:
-            filtered_products = [
-                product
-                for product in filtered_products
-                if product.price <= max_price
-            ]
-
-        filtered_products = self._sort_products(filtered_products, sort)
-
-        total = len(filtered_products)
-        paginated_products = filtered_products[offset: offset + limit]
+        total, items = product_repository.list_products(
+            session=session,
+            search=search,
+            min_price=min_price,
+            max_price=max_price,
+            limit=limit,
+            offset=offset,
+            sort=sort,
+        )
 
         return ProductListResponse(
             total=total,
             limit=limit,
             offset=offset,
-            items=paginated_products,
+            items=[
+                ProductResponse.model_validate(product)
+                for product in items
+            ],
         )
 
     def update_product(
         self,
+        session: Session,
         product_id: int,
         request: ProductUpdateRequest,
     ) -> ProductResponse:
-        self.get_product_by_id(product_id)
-        return product_repository.update(product_id, request)
+        product = self._get_product_or_404(session, product_id)
+
+        updated_product = product_repository.update(
+            session=session,
+            product=product,
+            request=request,
+        )
+
+        return ProductResponse.model_validate(updated_product)
 
     def patch_product(
         self,
+        session: Session,
         product_id: int,
         request: ProductPatchRequest,
     ) -> ProductResponse:
-        self.get_product_by_id(product_id)
+        product = self._get_product_or_404(session, product_id)
 
         update_data = request.model_dump(exclude_unset=True)
 
@@ -102,38 +99,40 @@ class ProductService:
                 detail="At least one field must be provided for update",
             )
 
-        return product_repository.patch(product_id, update_data)
+        updated_product = product_repository.patch(
+            session=session,
+            product=product,
+            request=request,
+        )
 
-    def delete_product(self, product_id: int) -> None:
-        self.get_product_by_id(product_id)
-        product_repository.delete(product_id)
+        return ProductResponse.model_validate(updated_product)
 
-    def _sort_products(
+    def delete_product(
         self,
-        products: List[ProductResponse],
-        sort: ProductSortOption,
-    ) -> List[ProductResponse]:
-        if sort == ProductSortOption.high_to_low:
-            return sorted(
-                products,
-                key=lambda product: product.price,
-                reverse=True,
+        session: Session,
+        product_id: int,
+    ) -> None:
+        product = self._get_product_or_404(session, product_id)
+
+        product_repository.delete(
+            session=session,
+            product=product,
+        )
+
+    def _get_product_or_404(
+        self,
+        session: Session,
+        product_id: int,
+    ):
+        product = product_repository.get_by_id(session, product_id)
+
+        if product is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Product not found",
             )
 
-        if sort == ProductSortOption.low_to_high:
-            return sorted(
-                products,
-                key=lambda product: product.price,
-            )
-
-        if sort == ProductSortOption.newly_added:
-            return sorted(
-                products,
-                key=lambda product: product.product_id,
-                reverse=True,
-            )
-
-        return products
+        return product
 
 
 product_service = ProductService()
