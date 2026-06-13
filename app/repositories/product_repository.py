@@ -20,6 +20,7 @@ class ProductRepository:
     ) -> Product:
         product = Product(
             product_name=request.product_name,
+            sku=request.sku,
             price=request.price,
             stock_qty=request.stock_qty,
             description=request.description,
@@ -95,6 +96,7 @@ class ProductRepository:
         request: ProductUpdateRequest,
     ) -> Product:
         product.product_name = request.product_name
+        product.sku = request.sku
         product.price = request.price
         product.stock_qty = request.stock_qty
         product.description = request.description

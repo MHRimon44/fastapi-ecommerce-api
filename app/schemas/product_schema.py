@@ -12,6 +12,7 @@ class ProductSortOption(str, Enum):
 
 class ProductCreateRequest(BaseModel):
     product_name: str = Field(..., min_length=2, max_length=100)
+    sku: Optional[str] = Field(default=None, max_length=100)
     price: float = Field(..., gt=0)
     stock_qty: int = Field(..., ge=0)
     description: Optional[str] = Field(default=None, max_length=500)
@@ -19,6 +20,7 @@ class ProductCreateRequest(BaseModel):
 
 class ProductUpdateRequest(BaseModel):
     product_name: str = Field(..., min_length=2, max_length=100)
+    sku: Optional[str] = Field(default=None, max_length=100)
     price: float = Field(..., gt=0)
     stock_qty: int = Field(..., ge=0)
     description: Optional[str] = Field(default=None, max_length=500)
@@ -26,6 +28,7 @@ class ProductUpdateRequest(BaseModel):
 
 class ProductPatchRequest(BaseModel):
     product_name: Optional[str] = Field(default=None, min_length=2, max_length=100)
+    sku: Optional[str] = Field(default=None, max_length=100)
     price: Optional[float] = Field(default=None, gt=0)
     stock_qty: Optional[int] = Field(default=None, ge=0)
     description: Optional[str] = Field(default=None, max_length=500)
@@ -36,6 +39,7 @@ class ProductResponse(BaseModel):
 
     product_id: int
     product_name: str
+    sku: Optional[str] = None
     price: float
     stock_qty: int
     description: Optional[str] = None
