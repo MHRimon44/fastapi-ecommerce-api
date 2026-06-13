@@ -24,6 +24,9 @@ def _format_validation_message(error: dict) -> str:
     if field_name == "product_name":
         return f"Product name validation failed: {msg}"
 
+    if field_name == "password":
+        return "Password must be between 6 and 72 characters"
+
     if field_name == "price":
         return f"Price validation failed: {msg}"
 

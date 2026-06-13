@@ -7,6 +7,7 @@ from app.api.v1.order_routes import router as order_router
 from app.api.v1.product_routes import router as product_router
 from app.api.v1.payment_routes import router as payment_router
 from app.api.v1.voucher_routes import router as voucher_router
+from app.api.v1.auth_routes import router as auth_router
 
 from app.core.exception_handlers import (
     http_exception_handler,
@@ -41,3 +42,4 @@ app.include_router(customer_router)
 app.include_router(order_router)
 app.include_router(payment_router)
 app.include_router(voucher_router)
+app.include_router(auth_router)
