@@ -1,7 +1,9 @@
 from datetime import datetime
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
-from sqlmodel import Session
+from sqlalchemy import func
+from sqlalchemy.orm import selectinload
+from sqlmodel import Session, select
 
 from app.models.order_model import Order, OrderItem
 
@@ -52,6 +54,48 @@ class OrderRepository:
             session.refresh(item)
 
         return order, created_items
+
+    def get_by_id(
+        self,
+        session: Session,
+        order_id: int,
+    ) -> Optional[Order]:
+        statement = (
+            select(Order)
+            .where(Order.order_id == order_id)
+            .options(selectinload(Order.items))
+        )
+
+        return session.exec(statement).first()
+
+    def list_orders(
+        self,
+        session: Session,
+        customer_id: Optional[int],
+        status: Optional[str],
+        limit: int,
+        offset: int,
+    ) -> Tuple[int, List[Order]]:
+        statement = select(Order)
+        count_statement = select(func.count()).select_from(Order)
+
+        if customer_id is not None:
+            statement = statement.where(Order.customer_id == customer_id)
+            count_statement = count_statement.where(Order.customer_id == customer_id)
+
+        if status:
+            statement = statement.where(Order.order_status == status)
+            count_statement = count_statement.where(Order.order_status == status)
+
+        statement = statement.order_by(Order.created_at.desc())
+
+        total = session.exec(count_statement).one()
+
+        statement = statement.offset(offset).limit(limit)
+
+        orders = session.exec(statement).all()
+
+        return total, orders
 
 
 order_repository = OrderRepository()
