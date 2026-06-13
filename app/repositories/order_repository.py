@@ -44,6 +44,8 @@ class OrderRepository:
             session.add(order_item)
             created_items.append(order_item)
 
+        order.sub_total = total_amount
+        order.discount_amount = 0
         order.total_amount = total_amount
         session.add(order)
 

@@ -9,7 +9,7 @@ from app.models.product_model import Product
 from app.models.customer_model import Customer
 from app.models.order_model import Order, OrderItem
 from app.models.payment_model import Payment
-
+from app.models.voucher_model import Voucher
 
 config = context.config
 

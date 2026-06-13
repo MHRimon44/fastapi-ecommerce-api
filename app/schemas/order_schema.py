@@ -38,6 +38,9 @@ class OrderResponse(BaseModel):
     order_no: str
     customer_id: int
     order_status: str
+    sub_total: float
+    discount_amount: float
+    voucher_code: Optional[str] = None
     total_amount: float
     created_at: datetime
     items: List[OrderItemResponse]
@@ -50,6 +53,9 @@ class OrderSummaryResponse(BaseModel):
     order_no: str
     customer_id: int
     order_status: str
+    sub_total: float
+    discount_amount: float
+    voucher_code: Optional[str] = None
     total_amount: float
     created_at: datetime
 

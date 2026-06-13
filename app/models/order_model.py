@@ -14,7 +14,10 @@ class Order(SQLModel, table=True):
     order_no: str = Field(index=True, max_length=50)
     customer_id: int = Field(foreign_key="customers.customer_id", index=True)
     order_status: str = Field(default="PLACED", index=True, max_length=30)
+    sub_total: float = Field(default=0, ge=0)
+    discount_amount: float = Field(default=0, ge=0)
     total_amount: float = Field(default=0, ge=0)
+    voucher_code: Optional[str] = Field(default=None, index=True, max_length=50)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     customer: Optional["Customer"] = Relationship(back_populates="orders")
