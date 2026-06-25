@@ -6,6 +6,8 @@ from uuid import uuid4
 from fastapi import HTTPException, UploadFile, status
 from pypdf import PdfReader
 
+from app.providers.document_ai_provider import get_document_ai_provider
+
 from app.schemas.document_schema import (
     DocumentUploadData,
     PurchaseOrderParseData,
@@ -62,40 +64,11 @@ class DocumentService:
         file_path = self._get_document_path(file_id)
         text = self._extract_text(file_path)
 
-        return PurchaseOrderParseData(
-            document_type="purchase_order",
+        provider = get_document_ai_provider()
+
+        return provider.parse_purchase_order_text(
             file_id=file_id,
-            po_number=self._find_first(
-                text,
-                [
-                    r"PO\s*(?:Number|No|#)\s*[:\-]\s*([A-Za-z0-9\-\/]+)",
-                    r"Purchase\s*Order\s*[:\-]\s*([A-Za-z0-9\-\/]+)",
-                ],
-            ),
-            buyer_name=self._find_first(
-                text,
-                [
-                    r"Buyer\s*[:\-]\s*([^\n\r]+)",
-                    r"Customer\s*[:\-]\s*([^\n\r]+)",
-                ],
-            ),
-            supplier_name=self._find_first(
-                text,
-                [
-                    r"Supplier\s*[:\-]\s*([^\n\r]+)",
-                    r"Vendor\s*[:\-]\s*([^\n\r]+)",
-                ],
-            ),
-            order_date=self._find_first(
-                text,
-                [
-                    r"Order\s*Date\s*[:\-]\s*([A-Za-z0-9\-\/\s,]+)",
-                    r"Date\s*[:\-]\s*([A-Za-z0-9\-\/\s,]+)",
-                ],
-            ),
-            total_quantity=self._extract_total_quantity(text),
-            items=self._extract_item_lines(text),
-            extracted_text_preview=self._preview_text(text),
+            extracted_text=text,
         )
 
     def extract_tech_pack(
@@ -105,53 +78,11 @@ class DocumentService:
         file_path = self._get_document_path(file_id)
         text = self._extract_text(file_path)
 
-        return TechPackExtractData(
-            document_type="tech_pack",
+        provider = get_document_ai_provider()
+
+        return provider.extract_tech_pack_text(
             file_id=file_id,
-            style_no=self._find_first(
-                text,
-                [
-                    r"Style\s*(?:No|Number|#)\s*[:\-]\s*([A-Za-z0-9\-\/]+)",
-                    r"Style\s*[:\-]\s*([A-Za-z0-9\-\/]+)",
-                ],
-            ),
-            buyer_name=self._find_first(
-                text,
-                [
-                    r"Buyer\s*[:\-]\s*([^\n\r]+)",
-                    r"Customer\s*[:\-]\s*([^\n\r]+)",
-                ],
-            ),
-            product_type=self._find_first(
-                text,
-                [
-                    r"Product\s*Type\s*[:\-]\s*([^\n\r]+)",
-                    r"Garment\s*Type\s*[:\-]\s*([^\n\r]+)",
-                ],
-            ),
-            fabric=self._find_first(
-                text,
-                [
-                    r"Fabric\s*[:\-]\s*([^\n\r]+)",
-                    r"Material\s*[:\-]\s*([^\n\r]+)",
-                ],
-            ),
-            color=self._find_first(
-                text,
-                [
-                    r"Color\s*[:\-]\s*([^\n\r]+)",
-                    r"Colour\s*[:\-]\s*([^\n\r]+)",
-                ],
-            ),
-            size_range=self._find_first(
-                text,
-                [
-                    r"Size\s*Range\s*[:\-]\s*([^\n\r]+)",
-                    r"Sizes\s*[:\-]\s*([^\n\r]+)",
-                ],
-            ),
-            measurements=self._extract_measurement_lines(text),
-            extracted_text_preview=self._preview_text(text),
+            extracted_text=text,
         )
 
     def _get_document_path(
