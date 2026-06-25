@@ -8,6 +8,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.api.v1.ai_routes import router as ai_router
 from app.api.v1.auth_routes import router as auth_router
 from app.api.v1.background_routes import router as background_router
+from app.api.v1.document_routes import router as document_router
 from app.api.v1.customer_routes import router as customer_router
 from app.api.v1.order_routes import router as order_router
 from app.api.v1.payment_routes import router as payment_router
@@ -102,4 +103,5 @@ app.include_router(payment_router)
 app.include_router(voucher_router)
 app.include_router(auth_router)
 app.include_router(background_router)
+app.include_router(document_router)
 app.include_router(ai_router)
