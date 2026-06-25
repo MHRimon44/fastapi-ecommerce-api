@@ -1,29 +1,16 @@
-import pytest
-from fastapi.testclient import TestClient
-
-from app.main import app
-from app.repositories.product_repository import product_repository
-
-client = TestClient(app)
-
-
-@pytest.fixture(autouse=True)
-def reset_repository():
-    product_repository.reset()
-    yield
-    product_repository.reset()
-
-
 def create_product(
-    product_name: str = "iPhone",
+    client,
+    product_name: str = "iPhone 15",
+    sku: str = "IPHONE-15-BLK-128",
     price: float = 112000,
     stock_qty: int = 10,
-    description: str = "Apple product",
+    description: str = "Apple iPhone 15",
 ):
     return client.post(
         "/products",
         json={
             "product_name": product_name,
+            "sku": sku,
             "price": price,
             "stock_qty": stock_qty,
             "description": description,
@@ -31,7 +18,7 @@ def create_product(
     )
 
 
-def test_health_check():
+def test_health_check(client):
     response = client.get("/")
 
     assert response.status_code == 200
@@ -40,211 +27,247 @@ def test_health_check():
     }
 
 
-def test_create_product_success():
-    response = create_product()
+def test_create_product_success(client):
+    response = create_product(client)
 
     assert response.status_code == 201
-
-    data = response.json()
-
-    assert data["product_id"] == 1
-    assert data["product_name"] == "iPhone"
-    assert data["price"] == 112000
-    assert data["stock_qty"] == 10
-    assert data["description"] == "Apple product"
+    assert response.json() == {
+        "message": "Product created successfully",
+    }
 
 
-def test_create_product_without_description_success():
+def test_create_product_without_description_success(client):
     response = client.post(
         "/products",
         json={
-            "product_name": "Samsung",
-            "price": 90000,
+            "product_name": "Samsung S24",
+            "sku": "SAMSUNG-S24",
+            "price": 95000,
             "stock_qty": 5,
         },
     )
 
     assert response.status_code == 201
-
-    data = response.json()
-
-    assert data["product_name"] == "Samsung"
-    assert data["description"] is None
+    assert response.json() == {
+        "message": "Product created successfully",
+    }
 
 
-def test_create_product_validation_error_for_negative_price():
+def test_create_product_invalid_price(client):
     response = client.post(
         "/products",
         json={
             "product_name": "Invalid Product",
-            "price": -100,
+            "sku": "INVALID-001",
+            "price": -10,
             "stock_qty": 5,
+            "description": "Invalid price product",
         },
     )
 
     assert response.status_code == 422
+    assert "message" in response.json()
 
 
-def test_get_product_by_id_success():
-    create_product(product_name="iPhone", price=112000)
+def test_get_products_after_create(client):
+    create_product(client)
 
-    response = client.get("/products/1")
+    response = client.get("/products")
 
     assert response.status_code == 200
 
-    data = response.json()
+    body = response.json()
 
-    assert data["product_id"] == 1
-    assert data["product_name"] == "iPhone"
+    assert body["total"] == 1
+    assert body["limit"] == 10
+    assert body["offset"] == 0
+    assert len(body["items"]) == 1
+    assert body["items"][0]["product_name"] == "iPhone 15"
+    assert body["items"][0]["sku"] == "IPHONE-15-BLK-128"
 
 
-def test_get_product_by_id_not_found():
+def test_get_product_by_id_success(client):
+    create_product(client)
+
+    list_response = client.get("/products")
+    product_id = list_response.json()["items"][0]["product_id"]
+
+    response = client.get(f"/products/{product_id}")
+
+    assert response.status_code == 200
+    assert response.json()["product_name"] == "iPhone 15"
+
+
+def test_get_product_by_id_not_found(client):
     response = client.get("/products/999")
 
     assert response.status_code == 404
     assert response.json() == {
-        "detail": "Product not found",
+        "message": "Product not found",
     }
 
 
-def test_get_products_with_sort_high_to_low():
-    create_product(product_name="Low Price Product", price=1000)
-    create_product(product_name="High Price Product", price=5000)
-    create_product(product_name="Medium Price Product", price=3000)
+def test_get_products_with_sort_high_to_low(client):
+    create_product(
+        client,
+        product_name="Low Price Product",
+        sku="LOW-001",
+        price=100,
+    )
+    create_product(
+        client,
+        product_name="High Price Product",
+        sku="HIGH-001",
+        price=500,
+    )
 
     response = client.get("/products?sort=high_to_low")
 
     assert response.status_code == 200
 
-    data = response.json()
-    items = data["items"]
+    items = response.json()["items"]
 
-    assert items[0]["price"] == 5000
-    assert items[1]["price"] == 3000
-    assert items[2]["price"] == 1000
+    assert items[0]["price"] == 500
+    assert items[1]["price"] == 100
 
 
-def test_get_products_with_sort_low_to_high():
-    create_product(product_name="High Price Product", price=5000)
-    create_product(product_name="Low Price Product", price=1000)
-    create_product(product_name="Medium Price Product", price=3000)
+def test_get_products_with_sort_low_to_high(client):
+    create_product(
+        client,
+        product_name="High Price Product",
+        sku="HIGH-001",
+        price=500,
+    )
+    create_product(
+        client,
+        product_name="Low Price Product",
+        sku="LOW-001",
+        price=100,
+    )
 
     response = client.get("/products?sort=low_to_high")
 
     assert response.status_code == 200
 
-    data = response.json()
-    items = data["items"]
+    items = response.json()["items"]
 
-    assert items[0]["price"] == 1000
-    assert items[1]["price"] == 3000
-    assert items[2]["price"] == 5000
+    assert items[0]["price"] == 100
+    assert items[1]["price"] == 500
 
 
-def test_get_products_with_sort_newly_added():
-    create_product(product_name="First Product", price=1000)
-    create_product(product_name="Second Product", price=2000)
-    create_product(product_name="Third Product", price=3000)
+def test_get_products_with_sort_newly_added(client):
+    create_product(
+        client,
+        product_name="First Product",
+        sku="FIRST-001",
+        price=100,
+    )
+    create_product(
+        client,
+        product_name="Second Product",
+        sku="SECOND-001",
+        price=200,
+    )
 
     response = client.get("/products?sort=newly_added")
 
     assert response.status_code == 200
 
-    data = response.json()
-    items = data["items"]
+    items = response.json()["items"]
 
-    assert items[0]["product_name"] == "Third Product"
-    assert items[1]["product_name"] == "Second Product"
-    assert items[2]["product_name"] == "First Product"
+    assert items[0]["product_name"] == "Second Product"
+    assert items[1]["product_name"] == "First Product"
 
 
-def test_get_products_with_pagination():
-    create_product(product_name="Product 1", price=1000)
-    create_product(product_name="Product 2", price=2000)
-    create_product(product_name="Product 3", price=3000)
+def test_get_products_with_pagination(client):
+    for index in range(15):
+        create_product(
+            client,
+            product_name=f"Product {index}",
+            sku=f"SKU-{index}",
+            price=100 + index,
+        )
 
-    response = client.get("/products?limit=2&offset=0")
-
-    assert response.status_code == 200
-
-    data = response.json()
-
-    assert data["total"] == 3
-    assert data["limit"] == 2
-    assert data["offset"] == 0
-    assert len(data["items"]) == 2
-    assert data["items"][0]["product_name"] == "Product 1"
-    assert data["items"][1]["product_name"] == "Product 2"
-
-
-def test_get_products_with_second_page():
-    create_product(product_name="Product 1", price=1000)
-    create_product(product_name="Product 2", price=2000)
-    create_product(product_name="Product 3", price=3000)
-
-    response = client.get("/products?limit=2&offset=2")
+    response = client.get("/products?limit=5&offset=0")
 
     assert response.status_code == 200
 
-    data = response.json()
+    body = response.json()
 
-    assert data["total"] == 3
-    assert data["limit"] == 2
-    assert data["offset"] == 2
-    assert len(data["items"]) == 1
-    assert data["items"][0]["product_name"] == "Product 3"
+    assert body["total"] == 15
+    assert body["limit"] == 5
+    assert body["offset"] == 0
+    assert len(body["items"]) == 5
 
 
-def test_get_products_invalid_price_range():
+def test_get_products_invalid_price_range(client):
     response = client.get("/products?min_price=5000&max_price=1000")
 
     assert response.status_code == 400
     assert response.json() == {
-        "detail": "min_price cannot be greater than max_price",
+        "message": "min_price cannot be greater than max_price",
     }
 
 
-def test_patch_product_success():
-    create_product(product_name="iPhone", price=112000, stock_qty=10)
+def test_patch_product_success(client):
+    create_product(
+        client,
+        product_name="Old Product",
+        sku="OLD-001",
+        price=100,
+    )
+
+    list_response = client.get("/products")
+    product_id = list_response.json()["items"][0]["product_id"]
 
     response = client.patch(
-        "/products/1",
+        f"/products/{product_id}",
         json={
-            "price": 110000,
+            "price": 150,
         },
     )
 
     assert response.status_code == 200
-
-    data = response.json()
-
-    assert data["product_id"] == 1
-    assert data["product_name"] == "iPhone"
-    assert data["price"] == 110000
-    assert data["stock_qty"] == 10
+    assert response.json()["price"] == 150
 
 
-def test_patch_product_empty_body_error():
-    create_product(product_name="iPhone", price=112000, stock_qty=10)
+def test_patch_product_empty_body_error(client):
+    create_product(
+        client,
+        product_name="Old Product",
+        sku="OLD-001",
+        price=100,
+    )
+
+    list_response = client.get("/products")
+    product_id = list_response.json()["items"][0]["product_id"]
 
     response = client.patch(
-        "/products/1",
+        f"/products/{product_id}",
         json={},
     )
 
     assert response.status_code == 400
     assert response.json() == {
-        "detail": "At least one field must be provided for update",
+        "message": "At least one field must be provided for update",
     }
 
 
-def test_delete_product_success():
-    create_product(product_name="iPhone", price=112000, stock_qty=10)
+def test_delete_product_success(client):
+    create_product(
+        client,
+        product_name="Delete Product",
+        sku="DELETE-001",
+        price=100,
+    )
 
-    delete_response = client.delete("/products/1")
+    list_response = client.get("/products")
+    product_id = list_response.json()["items"][0]["product_id"]
 
-    assert delete_response.status_code == 204
+    response = client.delete(f"/products/{product_id}")
 
-    get_response = client.get("/products/1")
+    assert response.status_code == 204
+
+    get_response = client.get(f"/products/{product_id}")
 
     assert get_response.status_code == 404

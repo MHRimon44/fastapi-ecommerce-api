@@ -2,6 +2,8 @@ from typing import Optional
 from sqlmodel import Session
 from fastapi import APIRouter, BackgroundTasks, Depends, Query, status
 from app.tasks.order_tasks import send_order_confirmation_notification
+from app.tasks.email_tasks import send_email_task
+from app.tasks.notification_tasks import enqueue_notification_task
 
 from app.db.session import get_session
 from app.schemas.common_schema import OrderPlacedResponse
@@ -38,6 +40,19 @@ def create_order(
         send_order_confirmation_notification,
         order.order_no
         )
+    
+    background_tasks.add_task(
+        send_email_task,
+        "customer@example.com",
+        "Order Confirmation",
+        f"Your order {order.order_no} has been placed successfully.",
+    )
+
+    background_tasks.add_task(
+        enqueue_notification_task,
+        "admin",
+        f"New order placed: {order.order_no}",
+    )
     
     return OrderPlacedResponse(
         message="Order placed successfully",
