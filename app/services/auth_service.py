@@ -56,8 +56,8 @@ class AuthService:
             )
 
         is_password_valid = verify_password(
-            plain_password=request.password,
-            password_hash=user.password_hash,
+            request.password,
+            user.password_hash,
         )
 
         if not is_password_valid:

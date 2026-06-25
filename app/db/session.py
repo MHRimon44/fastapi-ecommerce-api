@@ -1,22 +1,21 @@
-from sqlalchemy import event
 from sqlmodel import Session, create_engine
 
-from app.core.config import DATABASE_URL
+from app.core.config import settings
+
+
+connect_args = {}
+
+if settings.DATABASE_URL.startswith("sqlite"):
+    connect_args = {
+        "check_same_thread": False,
+    }
+
 
 engine = create_engine(
-    DATABASE_URL,
-    echo=False,
-    connect_args={
-        "check_same_thread": False,
-    },
+    settings.DATABASE_URL,
+    echo=settings.DEBUG,
+    connect_args=connect_args,
 )
-
-
-@event.listens_for(engine, "connect")
-def enable_sqlite_foreign_keys(dbapi_connection, connection_record):
-    cursor = dbapi_connection.cursor()
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.close()
 
 
 def get_session():

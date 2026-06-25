@@ -1,7 +1,64 @@
 import os
+from typing import List
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./ecommerce.db")
+from dotenv import load_dotenv
 
-SECRET_KEY = os.getenv("SECRET_KEY", "change-this-secret-key")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+
+load_dotenv()
+
+
+def _get_bool(key: str, default: bool = False) -> bool:
+    value = os.getenv(key)
+
+    if value is None:
+        return default
+
+    return value.lower() in ["true", "1", "yes", "y"]
+
+
+def _get_int(key: str, default: int) -> int:
+    value = os.getenv(key)
+
+    if value is None:
+        return default
+
+    return int(value)
+
+
+def _get_list(key: str, default: str = "") -> List[str]:
+    value = os.getenv(key, default)
+
+    if not value:
+        return []
+
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+class Settings:
+    def __init__(self):
+        self.APP_NAME = os.getenv("APP_NAME", "FastAPI Ecommerce")
+        self.APP_ENV = os.getenv("APP_ENV", "local")
+        self.DEBUG = _get_bool("DEBUG", True)
+
+        self.DATABASE_URL = os.getenv(
+            "DATABASE_URL",
+            "sqlite:///./ecommerce.db",
+        )
+
+        self.SECRET_KEY = os.getenv(
+            "SECRET_KEY",
+            "CHANGE_THIS_SECRET_KEY_FOR_PRODUCTION",
+        )
+        self.ALGORITHM = os.getenv("ALGORITHM", "HS256")
+        self.ACCESS_TOKEN_EXPIRE_MINUTES = _get_int(
+            "ACCESS_TOKEN_EXPIRE_MINUTES",
+            60,
+        )
+
+        self.CORS_ALLOWED_ORIGINS = _get_list(
+            "CORS_ALLOWED_ORIGINS",
+            "http://localhost:3000,http://127.0.0.1:3000",
+        )
+
+
+settings = Settings()

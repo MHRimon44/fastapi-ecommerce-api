@@ -4,7 +4,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
 
-from app.core.config import DATABASE_URL
+from app.core.config import settings
 from app.models.product_model import Product
 from app.models.customer_model import Customer
 from app.models.order_model import Order, OrderItem
@@ -14,7 +14,7 @@ from app.models.user_model import User
 
 config = context.config
 
-config.set_main_option("sqlalchemy.url", DATABASE_URL)
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
