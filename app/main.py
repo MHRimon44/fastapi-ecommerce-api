@@ -1,8 +1,10 @@
+import time
 from fastapi import FastAPI
+from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
-
+from app.core.logger import get_logger, setup_logging
 from app.core.config import settings
 from app.core.exception_handlers import (
     http_exception_handler,
@@ -17,12 +19,50 @@ from app.api.v1.voucher_routes import router as voucher_router
 from app.api.v1.auth_routes import router as auth_router
 from app.api.v1.background_routes import router as background_router
 
+setup_logging()
+logger = get_logger(__name__)
 
 app = FastAPI(
     title=settings.APP_NAME,
     debug=settings.DEBUG,
 )
 
+@app.middleware("http")
+async def request_logging_middleware(request: Request, call_next):
+    start_time = time.time()
+
+    try:
+        response = await call_next(request)
+
+        process_time = round(
+            (time.time() - start_time) * 1000,
+            2,
+        )
+
+        logger.info(
+            "%s %s completed with status %s in %sms",
+            request.method,
+            request.url.path,
+            response.status_code,
+            process_time,
+        )
+
+        return response
+
+    except Exception:
+        process_time = round(
+            (time.time() - start_time) * 1000,
+            2,
+        )
+
+        logger.exception(
+            "%s %s failed after %sms",
+            request.method,
+            request.url.path,
+            process_time,
+        )
+
+        raise
 
 app.add_middleware(
     CORSMiddleware,
