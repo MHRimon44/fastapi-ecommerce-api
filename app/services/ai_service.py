@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 
 from app.core.config import settings
-from app.providers.ai_provider import MockAIProvider
+from app.providers.ai_provider import MockAIProvider, OpenAIProvider
 from app.schemas.ai_schema import (
     CustomerSupportReplyData,
     CustomerSupportReplyRequest,
@@ -13,12 +13,12 @@ from app.schemas.ai_schema import (
 
 
 class AIService:
-    def __init__(self):
-        self.mock_provider = MockAIProvider()
-
-    def _get_provider(self) -> MockAIProvider:
+    def _get_provider(self):
         if settings.AI_PROVIDER == "mock":
-            return self.mock_provider
+            return MockAIProvider()
+
+        if settings.AI_PROVIDER == "openai":
+            return OpenAIProvider()
 
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -30,7 +30,6 @@ class AIService:
         request: GenerateProductDescriptionRequest,
     ) -> ProductDescriptionData:
         provider = self._get_provider()
-
         return provider.generate_product_description(request)
 
     def summarize_order_report(
@@ -38,7 +37,6 @@ class AIService:
         request: SummarizeOrderReportRequest,
     ) -> OrderReportSummaryData:
         provider = self._get_provider()
-
         return provider.summarize_order_report(request)
 
     def generate_customer_support_reply(
@@ -46,7 +44,6 @@ class AIService:
         request: CustomerSupportReplyRequest,
     ) -> CustomerSupportReplyData:
         provider = self._get_provider()
-
         return provider.generate_customer_support_reply(request)
 
 
