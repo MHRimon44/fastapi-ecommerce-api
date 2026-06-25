@@ -2,3 +2,11 @@
 Document type: purchase_order
 Extracted summary: PO Number 1001. Buyer: ABC Fashion. Total quantity: 500 pieces.
 --------------------------------------------------
+[2026-06-25 06:00:13.536406] AI PARSING COMPLETED
+Document type: purchase_order
+Extracted summary: PO Number 1001. Buyer ABC Fashion. Quantity 500 pieces.
+--------------------------------------------------
+[2026-06-25 06:03:04.428117] AI PARSING COMPLETED
+Document type: purchase_order
+Extracted summary: PO Number 1001. Buyer ABC Fashion. Quantity 500 pieces.
+--------------------------------------------------
