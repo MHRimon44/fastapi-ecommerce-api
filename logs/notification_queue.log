@@ -302,3 +302,51 @@ Message: New order placed: ORD-20260625092009119133
 Channel: admin
 Message: New order placed: ORD-20260625092009150175
 --------------------------------------------------
+[2026-06-25 10:37:51.175933] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-25 10:37:51.250862] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625103751245927
+--------------------------------------------------
+[2026-06-25 10:37:51.275200] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625103751271494
+--------------------------------------------------
+[2026-06-25 10:37:51.689067] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625103751685235
+--------------------------------------------------
+[2026-06-25 10:37:51.720902] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625103751717269
+--------------------------------------------------
+[2026-06-25 10:37:51.748264] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625103751744628
+--------------------------------------------------
+[2026-06-25 10:44:19.958470] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-25 10:44:20.027859] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625104420023475
+--------------------------------------------------
+[2026-06-25 10:44:20.051119] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625104420047131
+--------------------------------------------------
+[2026-06-25 10:44:20.458770] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625104420452951
+--------------------------------------------------
+[2026-06-25 10:44:20.490448] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625104420486635
+--------------------------------------------------
+[2026-06-25 10:44:20.518643] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625104420514897
+--------------------------------------------------

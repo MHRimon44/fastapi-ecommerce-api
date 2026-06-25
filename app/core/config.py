@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Optional
 
 from dotenv import load_dotenv
 
@@ -60,5 +60,16 @@ class Settings:
             "http://localhost:3000,http://127.0.0.1:3000",
         )
 
+        self.AI_PROVIDER = os.getenv("AI_PROVIDER", "mock")
+        self.AI_MODEL_NAME = os.getenv("AI_MODEL_NAME", "mock-product-writer-v1")
+        self.OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
+
 
 settings = Settings()
+
+
+# Backward compatibility for old imports
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+DATABASE_URL = settings.DATABASE_URL
