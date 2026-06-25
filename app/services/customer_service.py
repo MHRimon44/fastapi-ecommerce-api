@@ -1,8 +1,14 @@
+from typing import List
+
 from fastapi import HTTPException, status
 from sqlmodel import Session
 
 from app.repositories.customer_repository import customer_repository
-from app.schemas.customer_schema import CustomerCreateRequest, CustomerResponse
+from app.schemas.customer_schema import (
+    CustomerCreateRequest,
+    CustomerResponse,
+    CustomerShortResponse,
+)
 
 
 class CustomerService:
@@ -13,6 +19,17 @@ class CustomerService:
     ) -> CustomerResponse:
         customer = customer_repository.create(session, request)
         return CustomerResponse.model_validate(customer)
+
+    def get_customers(
+        self,
+        session: Session,
+    ) -> List[CustomerShortResponse]:
+        customers = customer_repository.list_customers(session=session)
+
+        return [
+            CustomerShortResponse.model_validate(customer)
+            for customer in customers
+        ]
 
     def get_customer_by_id(
         self,

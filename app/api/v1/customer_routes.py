@@ -1,13 +1,17 @@
+from typing import List
+
 from fastapi import APIRouter, Depends, status
 from sqlmodel import Session
 
 from app.db.session import get_session
+from app.schemas.common_schema import MessageResponse
 from app.schemas.customer_schema import (
     CustomerCreateRequest,
     CustomerResponse,
+    CustomerShortResponse,
 )
 from app.services.customer_service import customer_service
-from app.schemas.common_schema import MessageResponse
+
 
 router = APIRouter(
     prefix="/customers",
@@ -32,6 +36,20 @@ def create_customer(
     return MessageResponse(
         message="Customer created successfully",
     )
+
+
+@router.get(
+    "",
+    response_model=List[CustomerShortResponse],
+)
+def get_customers(
+    session: Session = Depends(get_session),
+):
+    return customer_service.get_customers(
+        session=session,
+    )
+
+
 @router.get(
     "/{customer_id}",
     response_model=CustomerResponse,

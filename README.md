@@ -56,3 +56,9 @@ fastapi-ecommerce-api/
 ├── requirements.txt
 └── README.md
 ```
+
+Activate virtual environment
+echo "source venv/bin/activate
+
+Run FastAPI server
+python -m uvicorn app.main:app --reload

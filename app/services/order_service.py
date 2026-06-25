@@ -80,12 +80,15 @@ class OrderService:
                 order_no=order.order_no,
                 customer_id=order.customer_id,
                 order_status=order.order_status,
+                sub_total=order.sub_total,
+                discount_amount=order.discount_amount,
                 total_amount=order.total_amount,
+                voucher_code=order.voucher_code,
                 created_at=order.created_at,
                 items=[
-                    OrderItemResponse.model_validate(item)
-                    for item in order_items
-                ],
+                OrderItemResponse.model_validate(item)
+                for item in order_items
+            ],
             )
 
         except HTTPException:
@@ -113,17 +116,20 @@ class OrderService:
             )
 
         return OrderResponse(
-            order_id=order.order_id,
-            order_no=order.order_no,
-            customer_id=order.customer_id,
-            order_status=order.order_status,
-            total_amount=order.total_amount,
-            created_at=order.created_at,
-            items=[
-                OrderItemResponse.model_validate(item)
-                for item in order.items
-            ],
-        )
+    order_id=order.order_id,
+    order_no=order.order_no,
+    customer_id=order.customer_id,
+    order_status=order.order_status,
+    sub_total=order.sub_total,
+    discount_amount=order.discount_amount,
+    total_amount=order.total_amount,
+    voucher_code=order.voucher_code,
+    created_at=order.created_at,
+    items=[
+        OrderItemResponse.model_validate(item)
+        for item in order.items
+    ],
+)
 
     def get_orders(
         self,

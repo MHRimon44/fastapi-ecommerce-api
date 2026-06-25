@@ -30,3 +30,10 @@ class CustomerResponse(BaseModel):
     customer_name: str
     phone: str
     email: Optional[str] = None
+
+
+class CustomerShortResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    customer_id: int
+    customer_name: str

@@ -1,7 +1,7 @@
 from typing import Optional
-
-from fastapi import APIRouter, Depends, Query, status
 from sqlmodel import Session
+from fastapi import APIRouter, BackgroundTasks, Depends, Query, status
+from app.tasks.order_tasks import send_order_confirmation_notification
 
 from app.db.session import get_session
 from app.schemas.common_schema import OrderPlacedResponse
@@ -26,6 +26,7 @@ router = APIRouter(
 )
 def create_order(
     request: OrderCreateRequest,
+    background_tasks:BackgroundTasks, 
     session: Session = Depends(get_session),
 ):
     order = order_service.create_order(
@@ -33,6 +34,11 @@ def create_order(
         request=request,
     )
 
+    background_tasks.add_task(
+        send_order_confirmation_notification,
+        order.order_no
+        )
+    
     return OrderPlacedResponse(
         message="Order placed successfully",
         order_no=order.order_no,

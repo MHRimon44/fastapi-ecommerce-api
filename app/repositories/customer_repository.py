@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import List, Optional
 
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from app.models.customer_model import Customer
 from app.schemas.customer_schema import CustomerCreateRequest
@@ -30,6 +30,13 @@ class CustomerRepository:
         customer_id: int,
     ) -> Optional[Customer]:
         return session.get(Customer, customer_id)
+
+    def list_customers(
+        self,
+        session: Session,
+    ) -> List[Customer]:
+        statement = select(Customer).order_by(Customer.customer_id.desc())
+        return session.exec(statement).all()
 
 
 customer_repository = CustomerRepository()
