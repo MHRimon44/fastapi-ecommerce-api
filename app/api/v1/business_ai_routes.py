@@ -4,11 +4,16 @@ from app.schemas.business_ai_schema import (
     SalesReportAnalysisRequest,
     SalesReportAnalysisResponse,
 )
+from app.schemas.product_recommendation_schema import (
+    ProductRecommendationRequest,
+    ProductRecommendationResponse,
+)
 from app.schemas.voucher_fraud_schema import (
     VoucherFraudDetectRequest,
     VoucherFraudDetectResponse,
 )
 from app.services.business_ai_service import business_ai_service
+from app.services.product_recommendation_service import product_recommendation_service
 from app.services.voucher_fraud_service import voucher_fraud_service
 
 
@@ -46,5 +51,21 @@ def detect_voucher_fraud(
 
     return VoucherFraudDetectResponse(
         message="Voucher fraud risk analyzed successfully",
+        data=data,
+    )
+
+
+@router.post(
+    "/product-recommendations/recommend",
+    response_model=ProductRecommendationResponse,
+    status_code=status.HTTP_200_OK,
+)
+def recommend_products(
+    request: ProductRecommendationRequest,
+) -> ProductRecommendationResponse:
+    data = product_recommendation_service.recommend_products(request)
+
+    return ProductRecommendationResponse(
+        message="Product recommendations generated successfully",
         data=data,
     )
