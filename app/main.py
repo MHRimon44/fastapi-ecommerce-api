@@ -2,6 +2,7 @@ from app.api.v1.erp_policy_routes import router as erp_policy_router
 from app.api.v1.company_document_routes import router as company_document_router
 from app.api.v1.business_ai_routes import router as business_ai_router
 from app.api.v1.ai_commerce_routes import router as ai_commerce_router
+from app.api.v1.ai_log_routes import router as ai_log_router
 import time
 
 from fastapi import FastAPI, Request
@@ -119,3 +120,4 @@ app.include_router(erp_policy_router)
 app.include_router(company_document_router)
 app.include_router(business_ai_router)
 app.include_router(ai_commerce_router)
+app.include_router(ai_log_router)
