@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
 from app.schemas.business_ai_schema import (
     SalesReportAnalysisRequest,
@@ -25,11 +25,13 @@ from app.services.customer_segmentation_service import customer_segmentation_ser
 from app.services.inventory_demand_service import inventory_demand_service
 from app.services.product_recommendation_service import product_recommendation_service
 from app.services.voucher_fraud_service import voucher_fraud_service
+from app.dependencies.auth_guard import require_authenticated_user
 
 
 router = APIRouter(
     prefix="/business-ai",
     tags=["Business AI"],
+    dependencies=[Depends(require_authenticated_user)],
 )
 
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
 from app.schemas.erp_policy_schema import (
     ERPPolicyAskRequest,
@@ -9,11 +9,13 @@ from app.schemas.erp_policy_schema import (
     ERPPolicySearchResponse,
 )
 from app.services.erp_policy_service import erp_policy_service
+from app.dependencies.auth_guard import require_authenticated_user
 
 
 router = APIRouter(
     prefix="/knowledge/erp-policies",
     tags=["ERP Policy Knowledge"],
+    dependencies=[Depends(require_authenticated_user)],
 )
 
 

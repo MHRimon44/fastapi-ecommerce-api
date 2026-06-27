@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile, status
+from fastapi import APIRouter, File, UploadFile, status, Depends
 
 from app.schemas.document_schema import (
     DocumentParseRequest,
@@ -7,11 +7,13 @@ from app.schemas.document_schema import (
     TechPackExtractResponse,
 )
 from app.services.document_service import document_service
+from app.dependencies.auth_guard import require_authenticated_user
 
 
 router = APIRouter(
     prefix="/documents",
     tags=["Documents"],
+    dependencies=[Depends(require_authenticated_user)],
 )
 
 

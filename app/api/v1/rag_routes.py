@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
 from app.schemas.rag_schema import (
     RAGAskRequest,
@@ -9,11 +9,13 @@ from app.schemas.rag_schema import (
     RAGSearchResponse,
 )
 from app.services.rag_service import rag_service
+from app.dependencies.auth_guard import require_authenticated_user
 
 
 router = APIRouter(
     prefix="/rag",
     tags=["RAG"],
+    dependencies=[Depends(require_authenticated_user)],
 )
 
 

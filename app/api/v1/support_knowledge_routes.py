@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
 from app.schemas.support_knowledge_schema import (
     SupportKnowledgeAskRequest,
@@ -9,11 +9,13 @@ from app.schemas.support_knowledge_schema import (
     SupportKnowledgeSearchResponse,
 )
 from app.services.support_knowledge_service import support_knowledge_service
+from app.dependencies.auth_guard import require_authenticated_user
 
 
 router = APIRouter(
     prefix="/knowledge/support",
     tags=["Customer Support Knowledge"],
+    dependencies=[Depends(require_authenticated_user)],
 )
 
 

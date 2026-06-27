@@ -1,15 +1,17 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
 from app.schemas.ai_commerce_schema import (
     AICommerceBusinessReviewRequest,
     AICommerceBusinessReviewResponse,
 )
 from app.services.ai_commerce_service import ai_commerce_service
+from app.dependencies.auth_guard import require_authenticated_user
 
 
 router = APIRouter(
     prefix="/ai-commerce",
     tags=["AI Commerce Review"],
+    dependencies=[Depends(require_authenticated_user)],
 )
 
 

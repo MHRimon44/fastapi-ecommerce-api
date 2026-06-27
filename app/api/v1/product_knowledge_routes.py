@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
 from app.schemas.product_knowledge_schema import (
     ProductKnowledgeAskRequest,
@@ -9,11 +9,13 @@ from app.schemas.product_knowledge_schema import (
     ProductKnowledgeSearchResponse,
 )
 from app.services.product_knowledge_service import product_knowledge_service
+from app.dependencies.auth_guard import require_authenticated_user
 
 
 router = APIRouter(
     prefix="/knowledge/products",
     tags=["Product Knowledge"],
+    dependencies=[Depends(require_authenticated_user)],
 )
 
 

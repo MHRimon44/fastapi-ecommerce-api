@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
 from app.schemas.company_document_schema import (
     CompanyDocumentAskRequest,
@@ -9,11 +9,13 @@ from app.schemas.company_document_schema import (
     CompanyDocumentSearchResponse,
 )
 from app.services.company_document_service import company_document_service
+from app.dependencies.auth_guard import require_authenticated_user
 
 
 router = APIRouter(
     prefix="/knowledge/company-documents",
     tags=["Company Document Knowledge"],
+    dependencies=[Depends(require_authenticated_user)],
 )
 
 

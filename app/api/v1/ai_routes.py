@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
 from app.schemas.ai_schema import (
     CustomerSupportReplyRequest,
@@ -9,11 +9,13 @@ from app.schemas.ai_schema import (
     SummarizeOrderReportRequest,
 )
 from app.services.ai_service import ai_service
+from app.dependencies.auth_guard import require_authenticated_user
 
 
 router = APIRouter(
     prefix="/ai",
     tags=["AI"],
+    dependencies=[Depends(require_authenticated_user)],
 )
 
 
