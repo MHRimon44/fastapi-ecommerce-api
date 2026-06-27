@@ -2,6 +2,7 @@ from typing import List
 from uuid import uuid4
 
 from app.providers.embedding_provider import get_embedding_provider
+from app.providers.rag_answer_provider import get_rag_answer_provider
 from app.schemas.rag_schema import (
     RAGAskData,
     RAGDocumentIndexData,
@@ -68,16 +69,15 @@ class RAGService:
             top_k=top_k,
         )
 
-        if not sources:
-            return RAGAskData(
-                answer="I could not find relevant information from the indexed documents.",
-                sources=[],
-            )
+        answer_provider = get_rag_answer_provider()
 
-        best_source = sources[0]
+        answer = answer_provider.generate_answer(
+            question=question,
+            sources=sources,
+        )
 
         return RAGAskData(
-            answer=best_source.content,
+            answer=answer,
             sources=sources,
         )
 
