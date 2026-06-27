@@ -4,7 +4,12 @@ from app.schemas.business_ai_schema import (
     SalesReportAnalysisRequest,
     SalesReportAnalysisResponse,
 )
+from app.schemas.voucher_fraud_schema import (
+    VoucherFraudDetectRequest,
+    VoucherFraudDetectResponse,
+)
 from app.services.business_ai_service import business_ai_service
+from app.services.voucher_fraud_service import voucher_fraud_service
 
 
 router = APIRouter(
@@ -25,5 +30,21 @@ def analyze_sales_report(
 
     return SalesReportAnalysisResponse(
         message="Sales report analyzed successfully",
+        data=data,
+    )
+
+
+@router.post(
+    "/voucher-fraud/detect",
+    response_model=VoucherFraudDetectResponse,
+    status_code=status.HTTP_200_OK,
+)
+def detect_voucher_fraud(
+    request: VoucherFraudDetectRequest,
+) -> VoucherFraudDetectResponse:
+    data = voucher_fraud_service.detect_fraud(request)
+
+    return VoucherFraudDetectResponse(
+        message="Voucher fraud risk analyzed successfully",
         data=data,
     )
