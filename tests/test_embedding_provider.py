@@ -1,5 +1,5 @@
 from app.providers.embedding_provider import MockEmbeddingProvider
-from app.services.rag_service import RAGService
+from app.vectorstores.in_memory_vector_store import InMemoryVectorStore
 
 
 def test_mock_embedding_provider_returns_sparse_vector():
@@ -15,7 +15,7 @@ def test_mock_embedding_provider_returns_sparse_vector():
 
 
 def test_sparse_cosine_similarity_returns_positive_score():
-    service = RAGService()
+    store = InMemoryVectorStore()
 
     vector_a = {
         "voucher": 1.0,
@@ -27,7 +27,7 @@ def test_sparse_cosine_similarity_returns_positive_score():
         "checkout": 1.0,
     }
 
-    score = service._cosine_similarity(
+    score = store._cosine_similarity(
         vector_a,
         vector_b,
     )
