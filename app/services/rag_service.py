@@ -8,7 +8,7 @@ from app.schemas.rag_schema import (
     RAGDocumentIndexRequest,
     RAGSearchResult,
 )
-from app.vectorstores.in_memory_vector_store import vector_store
+from app.vectorstores.file_vector_store import vector_store
 
 
 class RAGService:

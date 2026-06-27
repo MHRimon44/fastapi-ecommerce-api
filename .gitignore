@@ -12,3 +12,5 @@ logs/
 uploads/
 generated_reports/
 *.db
+# Local RAG vector store data
+storage/vector_store.json
