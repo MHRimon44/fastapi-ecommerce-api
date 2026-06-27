@@ -64,6 +64,12 @@ class Settings:
         self.AI_MODEL_NAME = os.getenv("AI_MODEL_NAME", "mock-product-writer-v1")
         self.OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
 
+        self.EMBEDDING_PROVIDER = os.getenv("EMBEDDING_PROVIDER", "mock")
+        self.EMBEDDING_MODEL_NAME = os.getenv(
+            "EMBEDDING_MODEL_NAME",
+            "mock-bow-v1",
+        )
+
 
 settings = Settings()
 
