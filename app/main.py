@@ -1,3 +1,4 @@
+from app.api.v1.erp_policy_routes import router as erp_policy_router
 import time
 
 from fastapi import FastAPI, Request
@@ -15,6 +16,7 @@ from app.api.v1.payment_routes import router as payment_router
 from app.api.v1.rag_routes import router as rag_router
 from app.api.v1.product_routes import router as product_router
 from app.api.v1.product_knowledge_routes import router as product_knowledge_router
+from app.api.v1.support_knowledge_routes import router as support_knowledge_router
 from app.api.v1.voucher_routes import router as voucher_router
 from app.core.config import settings
 from app.core.exception_handlers import (
@@ -100,6 +102,7 @@ def health_check():
 
 app.include_router(product_router)
 app.include_router(product_knowledge_router)
+app.include_router(support_knowledge_router)
 app.include_router(customer_router)
 app.include_router(order_router)
 app.include_router(payment_router)
@@ -109,3 +112,4 @@ app.include_router(auth_router)
 app.include_router(background_router)
 app.include_router(document_router)
 app.include_router(ai_router)
+app.include_router(erp_policy_router)
