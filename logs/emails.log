@@ -773,3 +773,33 @@ To: customer@example.com
 Subject: Order Confirmation
 Body: Your order ORD-20260627110106246430 has been placed successfully.
 --------------------------------------------------
+[2026-06-27 11:05:46.896631] EMAIL SENT
+To: rahim@example.com
+Subject: Test Email
+Body: This is a test email.
+--------------------------------------------------
+[2026-06-27 11:05:47.197995] EMAIL SENT
+To: customer@example.com
+Subject: Order Confirmation
+Body: Your order ORD-20260627110547193114 has been placed successfully.
+--------------------------------------------------
+[2026-06-27 11:05:47.225739] EMAIL SENT
+To: customer@example.com
+Subject: Order Confirmation
+Body: Your order ORD-20260627110547220578 has been placed successfully.
+--------------------------------------------------
+[2026-06-27 11:05:47.955928] EMAIL SENT
+To: customer@example.com
+Subject: Order Confirmation
+Body: Your order ORD-20260627110547951942 has been placed successfully.
+--------------------------------------------------
+[2026-06-27 11:05:47.993312] EMAIL SENT
+To: customer@example.com
+Subject: Order Confirmation
+Body: Your order ORD-20260627110547989037 has been placed successfully.
+--------------------------------------------------
+[2026-06-27 11:05:48.025249] EMAIL SENT
+To: customer@example.com
+Subject: Order Confirmation
+Body: Your order ORD-20260627110548021095 has been placed successfully.
+--------------------------------------------------

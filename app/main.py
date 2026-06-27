@@ -1,4 +1,5 @@
 from app.api.v1.erp_policy_routes import router as erp_policy_router
+from app.api.v1.company_document_routes import router as company_document_router
 import time
 
 from fastapi import FastAPI, Request
@@ -113,3 +114,4 @@ app.include_router(background_router)
 app.include_router(document_router)
 app.include_router(ai_router)
 app.include_router(erp_policy_router)
+app.include_router(company_document_router)

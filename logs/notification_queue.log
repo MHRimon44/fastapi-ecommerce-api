@@ -614,3 +614,27 @@ Message: New order placed: ORD-20260627110106213837
 Channel: admin
 Message: New order placed: ORD-20260627110106246430
 --------------------------------------------------
+[2026-06-27 11:05:46.897829] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:05:47.198460] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110547193114
+--------------------------------------------------
+[2026-06-27 11:05:47.226094] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110547220578
+--------------------------------------------------
+[2026-06-27 11:05:47.956403] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110547951942
+--------------------------------------------------
+[2026-06-27 11:05:47.993680] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110547989037
+--------------------------------------------------
+[2026-06-27 11:05:48.025575] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110548021095
+--------------------------------------------------
