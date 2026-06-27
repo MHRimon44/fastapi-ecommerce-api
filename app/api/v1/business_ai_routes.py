@@ -4,6 +4,10 @@ from app.schemas.business_ai_schema import (
     SalesReportAnalysisRequest,
     SalesReportAnalysisResponse,
 )
+from app.schemas.customer_segmentation_schema import (
+    CustomerSegmentationRequest,
+    CustomerSegmentationResponse,
+)
 from app.schemas.inventory_demand_schema import (
     InventoryDemandForecastRequest,
     InventoryDemandForecastResponse,
@@ -17,6 +21,7 @@ from app.schemas.voucher_fraud_schema import (
     VoucherFraudDetectResponse,
 )
 from app.services.business_ai_service import business_ai_service
+from app.services.customer_segmentation_service import customer_segmentation_service
 from app.services.inventory_demand_service import inventory_demand_service
 from app.services.product_recommendation_service import product_recommendation_service
 from app.services.voucher_fraud_service import voucher_fraud_service
@@ -88,5 +93,21 @@ def forecast_inventory_demand(
 
     return InventoryDemandForecastResponse(
         message="Inventory demand forecast generated successfully",
+        data=data,
+    )
+
+
+@router.post(
+    "/customer-segmentation/segment",
+    response_model=CustomerSegmentationResponse,
+    status_code=status.HTTP_200_OK,
+)
+def segment_customer(
+    request: CustomerSegmentationRequest,
+) -> CustomerSegmentationResponse:
+    data = customer_segmentation_service.segment_customer(request)
+
+    return CustomerSegmentationResponse(
+        message="Customer segmented successfully",
         data=data,
     )
