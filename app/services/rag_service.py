@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from uuid import uuid4
 
 from app.providers.embedding_provider import get_embedding_provider
@@ -50,6 +50,7 @@ class RAGService:
         self,
         query: str,
         top_k: int,
+        source_type: Optional[str] = None,
     ) -> List[RAGSearchResult]:
         embedding_provider = get_embedding_provider()
         query_vector = embedding_provider.create_embedding(query)
@@ -57,16 +58,19 @@ class RAGService:
         return vector_store.search(
             query_vector=query_vector,
             top_k=top_k,
+            source_type=source_type,
         )
 
     def ask(
         self,
         question: str,
         top_k: int,
+        source_type: Optional[str] = None,
     ) -> RAGAskData:
         sources = self.search(
             query=question,
             top_k=top_k,
+            source_type=source_type,
         )
 
         answer_provider = get_rag_answer_provider()

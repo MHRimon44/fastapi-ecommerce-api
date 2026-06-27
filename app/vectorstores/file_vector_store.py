@@ -46,11 +46,15 @@ class FileVectorStore:
         self,
         query_vector: EmbeddingVector,
         top_k: int,
+        source_type: Optional[str] = None,
     ) -> List[RAGSearchResult]:
         chunks = self._load_chunks()
         results: List[RAGSearchResult] = []
 
         for chunk in chunks:
+            if source_type and chunk.get("source_type") != source_type:
+                continue
+
             score = self._cosine_similarity(
                 query_vector,
                 chunk["vector"],
