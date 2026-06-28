@@ -1,7 +1,12 @@
 from fastapi import HTTPException, status
 from sqlmodel import Session
 
-from app.core.security import create_access_token, hash_password, verify_password
+from app.core.security import (
+    create_access_token,
+    create_refresh_token,
+    hash_password,
+    verify_password,
+)
 from app.repositories.user_repository import user_repository
 from app.schemas.auth_schema import LoginRequest, RegisterRequest, TokenResponse
 
@@ -66,10 +71,27 @@ class AuthService:
                 detail="Invalid email or password",
             )
 
-        access_token = create_access_token(subject=str(user.user_id))
+        user_role = getattr(user, "role", "Customer")
+
+        token_payload = {
+            "user_id": user.user_id,
+            "email": user.email,
+            "role": user_role,
+        }
+
+        access_token = create_access_token(
+            subject=str(user.user_id),
+            extra_payload=token_payload,
+        )
+
+        refresh_token = create_refresh_token(
+            subject=str(user.user_id),
+            extra_payload=token_payload,
+        )
 
         return TokenResponse(
             access_token=access_token,
+            refresh_token=refresh_token,
             token_type="bearer",
         )
 

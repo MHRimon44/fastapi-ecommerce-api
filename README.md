@@ -1457,10 +1457,22 @@ docker compose up -d --build
 docker compose exec api python -m alembic upgrade head
 ```
 
+Reload:
+
+```powershell
+docker compose restart api
+```
+
 Open Swagger:
 
 ```text
 http://127.0.0.1:8000/docs
+```
+
+Close with Docker:
+
+```powershell
+docker compose down
 ```
 
 Run tests:

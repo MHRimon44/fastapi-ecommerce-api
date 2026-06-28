@@ -302,3 +302,579 @@ Message: New order placed: ORD-20260625092009119133
 Channel: admin
 Message: New order placed: ORD-20260625092009150175
 --------------------------------------------------
+[2026-06-25 10:37:51.175933] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-25 10:37:51.250862] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625103751245927
+--------------------------------------------------
+[2026-06-25 10:37:51.275200] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625103751271494
+--------------------------------------------------
+[2026-06-25 10:37:51.689067] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625103751685235
+--------------------------------------------------
+[2026-06-25 10:37:51.720902] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625103751717269
+--------------------------------------------------
+[2026-06-25 10:37:51.748264] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625103751744628
+--------------------------------------------------
+[2026-06-25 10:44:19.958470] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-25 10:44:20.027859] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625104420023475
+--------------------------------------------------
+[2026-06-25 10:44:20.051119] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625104420047131
+--------------------------------------------------
+[2026-06-25 10:44:20.458770] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625104420452951
+--------------------------------------------------
+[2026-06-25 10:44:20.490448] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625104420486635
+--------------------------------------------------
+[2026-06-25 10:44:20.518643] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625104420514897
+--------------------------------------------------
+[2026-06-25 11:03:31.970860] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-25 11:03:32.044848] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625110332039764
+--------------------------------------------------
+[2026-06-25 11:03:32.068719] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625110332065146
+--------------------------------------------------
+[2026-06-25 11:03:32.460213] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625110332455031
+--------------------------------------------------
+[2026-06-25 11:03:32.494434] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625110332490415
+--------------------------------------------------
+[2026-06-25 11:03:32.525217] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625110332521252
+--------------------------------------------------
+[2026-06-25 11:15:21.693173] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-25 11:15:21.835470] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625111521829806
+--------------------------------------------------
+[2026-06-25 11:15:21.861052] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625111521855748
+--------------------------------------------------
+[2026-06-25 11:15:22.298004] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625111522293984
+--------------------------------------------------
+[2026-06-25 11:15:22.333203] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625111522329273
+--------------------------------------------------
+[2026-06-25 11:15:22.362189] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625111522358460
+--------------------------------------------------
+[2026-06-25 11:24:16.149242] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-25 11:24:16.321314] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625112416314994
+--------------------------------------------------
+[2026-06-25 11:24:16.351923] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625112416342984
+--------------------------------------------------
+[2026-06-25 11:24:16.834522] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625112416830315
+--------------------------------------------------
+[2026-06-25 11:24:16.867310] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625112416863179
+--------------------------------------------------
+[2026-06-25 11:24:16.895512] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260625112416891818
+--------------------------------------------------
+[2026-06-27 08:54:21.363736] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 08:54:21.505748] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627085421499844
+--------------------------------------------------
+[2026-06-27 08:54:21.530020] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627085421526118
+--------------------------------------------------
+[2026-06-27 08:54:22.016345] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627085422012392
+--------------------------------------------------
+[2026-06-27 08:54:22.054916] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627085422049849
+--------------------------------------------------
+[2026-06-27 08:54:22.091666] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627085422087464
+--------------------------------------------------
+[2026-06-27 09:37:50.018132] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 09:37:50.151361] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627093750146228
+--------------------------------------------------
+[2026-06-27 09:37:50.176610] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627093750171948
+--------------------------------------------------
+[2026-06-27 09:37:50.670809] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627093750666544
+--------------------------------------------------
+[2026-06-27 09:37:50.737505] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627093750702463
+--------------------------------------------------
+[2026-06-27 09:37:50.769647] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627093750765059
+--------------------------------------------------
+[2026-06-27 09:56:34.239932] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 09:56:34.388315] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627095634382024
+--------------------------------------------------
+[2026-06-27 09:56:34.413660] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627095634409446
+--------------------------------------------------
+[2026-06-27 09:56:34.969968] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627095634965921
+--------------------------------------------------
+[2026-06-27 09:56:35.006234] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627095635002112
+--------------------------------------------------
+[2026-06-27 09:56:35.037633] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627095635033645
+--------------------------------------------------
+[2026-06-27 10:01:05.018792] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 10:01:05.180746] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627100105170579
+--------------------------------------------------
+[2026-06-27 10:01:05.222667] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627100105218555
+--------------------------------------------------
+[2026-06-27 10:01:05.790481] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627100105786353
+--------------------------------------------------
+[2026-06-27 10:01:05.828356] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627100105824085
+--------------------------------------------------
+[2026-06-27 10:01:05.860407] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627100105856134
+--------------------------------------------------
+[2026-06-27 10:08:03.155546] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 10:08:03.314215] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627100803308894
+--------------------------------------------------
+[2026-06-27 10:08:03.353423] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627100803349245
+--------------------------------------------------
+[2026-06-27 10:08:03.955614] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627100803951318
+--------------------------------------------------
+[2026-06-27 10:08:03.994133] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627100803989866
+--------------------------------------------------
+[2026-06-27 10:08:04.025876] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627100804021341
+--------------------------------------------------
+[2026-06-27 10:16:39.963124] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 10:16:40.119636] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627101640113534
+--------------------------------------------------
+[2026-06-27 10:16:40.145278] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627101640140929
+--------------------------------------------------
+[2026-06-27 10:16:40.835655] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627101640831630
+--------------------------------------------------
+[2026-06-27 10:16:40.871725] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627101640867644
+--------------------------------------------------
+[2026-06-27 10:16:40.904464] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627101640900409
+--------------------------------------------------
+[2026-06-27 10:57:54.029037] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 10:57:54.264720] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627105754259409
+--------------------------------------------------
+[2026-06-27 10:57:54.291696] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627105754286907
+--------------------------------------------------
+[2026-06-27 10:57:55.061356] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627105755054960
+--------------------------------------------------
+[2026-06-27 10:57:55.103788] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627105755099287
+--------------------------------------------------
+[2026-06-27 10:57:55.172532] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627105755164535
+--------------------------------------------------
+[2026-06-27 11:01:05.173948] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:01:05.420252] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110105414985
+--------------------------------------------------
+[2026-06-27 11:01:05.446933] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110105442398
+--------------------------------------------------
+[2026-06-27 11:01:06.167628] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110106162608
+--------------------------------------------------
+[2026-06-27 11:01:06.218123] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110106213837
+--------------------------------------------------
+[2026-06-27 11:01:06.251000] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110106246430
+--------------------------------------------------
+[2026-06-27 11:05:46.897829] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:05:47.198460] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110547193114
+--------------------------------------------------
+[2026-06-27 11:05:47.226094] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110547220578
+--------------------------------------------------
+[2026-06-27 11:05:47.956403] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110547951942
+--------------------------------------------------
+[2026-06-27 11:05:47.993680] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110547989037
+--------------------------------------------------
+[2026-06-27 11:05:48.025575] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110548021095
+--------------------------------------------------
+[2026-06-27 11:09:07.822001] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:09:08.223518] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110908217546
+--------------------------------------------------
+[2026-06-27 11:09:08.255578] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110908248807
+--------------------------------------------------
+[2026-06-27 11:09:09.014137] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110909009951
+--------------------------------------------------
+[2026-06-27 11:09:09.052005] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110909047992
+--------------------------------------------------
+[2026-06-27 11:09:09.083736] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627110909079653
+--------------------------------------------------
+[2026-06-27 11:14:37.162324] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:14:37.501302] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627111437495185
+--------------------------------------------------
+[2026-06-27 11:14:37.526704] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627111437522665
+--------------------------------------------------
+[2026-06-27 11:14:38.272487] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627111438268062
+--------------------------------------------------
+[2026-06-27 11:14:38.310963] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627111438306556
+--------------------------------------------------
+[2026-06-27 11:14:38.342169] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627111438338045
+--------------------------------------------------
+[2026-06-27 11:20:01.583929] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:20:01.946578] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112001941286
+--------------------------------------------------
+[2026-06-27 11:20:01.974133] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112001969820
+--------------------------------------------------
+[2026-06-27 11:20:02.769732] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112002765162
+--------------------------------------------------
+[2026-06-27 11:20:02.807029] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112002802683
+--------------------------------------------------
+[2026-06-27 11:20:02.841234] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112002837090
+--------------------------------------------------
+[2026-06-27 11:24:09.704883] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:24:10.104481] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112410098050
+--------------------------------------------------
+[2026-06-27 11:24:10.131146] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112410127019
+--------------------------------------------------
+[2026-06-27 11:24:10.956295] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112410951328
+--------------------------------------------------
+[2026-06-27 11:24:10.994698] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112410990530
+--------------------------------------------------
+[2026-06-27 11:24:11.029297] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112411025089
+--------------------------------------------------
+[2026-06-27 11:27:52.432700] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:27:52.924199] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112752915901
+--------------------------------------------------
+[2026-06-27 11:27:52.968328] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112752962976
+--------------------------------------------------
+[2026-06-27 11:27:53.702428] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112753697143
+--------------------------------------------------
+[2026-06-27 11:27:53.739204] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112753735156
+--------------------------------------------------
+[2026-06-27 11:27:53.772452] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627112753768204
+--------------------------------------------------
+[2026-06-27 11:33:28.589661] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:33:29.057398] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113329051811
+--------------------------------------------------
+[2026-06-27 11:33:29.085446] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113329081383
+--------------------------------------------------
+[2026-06-27 11:33:29.883612] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113329877526
+--------------------------------------------------
+[2026-06-27 11:33:29.925590] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113329920914
+--------------------------------------------------
+[2026-06-27 11:33:29.965703] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113329960656
+--------------------------------------------------
+[2026-06-27 11:35:17.895458] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:35:18.830370] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113518823962
+--------------------------------------------------
+[2026-06-27 11:35:18.861507] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113518856703
+--------------------------------------------------
+[2026-06-27 11:35:19.825939] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113519819816
+--------------------------------------------------
+[2026-06-27 11:35:19.868929] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113519864337
+--------------------------------------------------
+[2026-06-27 11:35:19.907409] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113519902984
+--------------------------------------------------
+[2026-06-27 11:36:55.479723] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:36:56.044344] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113656038896
+--------------------------------------------------
+[2026-06-27 11:36:56.070259] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113656066111
+--------------------------------------------------
+[2026-06-27 11:36:56.934980] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113656930239
+--------------------------------------------------
+[2026-06-27 11:36:56.976194] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113656971908
+--------------------------------------------------
+[2026-06-27 11:36:57.010776] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627113657006222
+--------------------------------------------------
+[2026-06-27 11:40:33.613061] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:40:34.099156] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627114034092803
+--------------------------------------------------
+[2026-06-27 11:40:34.126461] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627114034121920
+--------------------------------------------------
+[2026-06-27 11:40:34.981470] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627114034976815
+--------------------------------------------------
+[2026-06-27 11:40:35.021488] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627114035016905
+--------------------------------------------------
+[2026-06-27 11:40:35.056266] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627114035051548
+--------------------------------------------------
+[2026-06-27 11:53:09.924237] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed
+--------------------------------------------------
+[2026-06-27 11:53:10.449897] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627115310444048
+--------------------------------------------------
+[2026-06-27 11:53:10.479337] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627115310474890
+--------------------------------------------------
+[2026-06-27 11:53:11.303611] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627115311299028
+--------------------------------------------------
+[2026-06-27 11:53:11.340746] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627115311336403
+--------------------------------------------------
+[2026-06-27 11:53:11.374167] NOTIFICATION QUEUED
+Channel: admin
+Message: New order placed: ORD-20260627115311369884
+--------------------------------------------------

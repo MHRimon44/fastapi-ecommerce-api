@@ -43,3 +43,39 @@ def client_fixture(session: Session):
         yield client
 
     app.dependency_overrides.clear()
+
+from app.dependencies.auth_guard import AuthenticatedUser, require_authenticated_user
+
+
+@pytest.fixture(autouse=True)
+def override_ai_auth_dependency_for_tests():
+    def fake_authenticated_user():
+        return AuthenticatedUser(
+            user_id="1",
+            email="test@example.com",
+            token_subject="test@example.com",
+        )
+
+    app.dependency_overrides[require_authenticated_user] = fake_authenticated_user
+
+    yield
+
+    app.dependency_overrides.pop(require_authenticated_user, None)
+
+from app.dependencies.auth_guard import AuthenticatedUser, require_authenticated_user
+
+
+@pytest.fixture(autouse=True)
+def override_ai_auth_dependency_for_tests():
+    def fake_authenticated_user():
+        return AuthenticatedUser(
+            user_id="1",
+            email="test@example.com",
+            token_subject="test@example.com",
+        )
+
+    app.dependency_overrides[require_authenticated_user] = fake_authenticated_user
+
+    yield
+
+    app.dependency_overrides.pop(require_authenticated_user, None)
