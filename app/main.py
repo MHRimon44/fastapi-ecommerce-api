@@ -25,6 +25,7 @@ from app.api.v1.product_knowledge_routes import router as product_knowledge_rout
 from app.api.v1.support_knowledge_routes import router as support_knowledge_router
 from app.api.v1.voucher_routes import router as voucher_router
 from app.api.v1.admin_product_routes import router as admin_product_router
+from app.api.v1.admin_customer_routes import router as admin_customer_router
 from app.core.config import settings
 from app.core.exception_handlers import (
     http_exception_handler,
@@ -127,3 +128,4 @@ app.include_router(ai_log_router)
 app.include_router(admin_user_router)
 app.include_router(admin_report_router)
 app.include_router(admin_product_router)
+app.include_router(admin_customer_router)
