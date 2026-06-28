@@ -6,7 +6,7 @@ from jose import JWTError, jwt
 from pydantic import BaseModel
 
 from app.core.config import settings
-from app.core.roles import ADMIN_ROLES
+from app.core.roles import ADMIN_ROLES, normalize_role
 
 
 bearer_scheme = HTTPBearer(auto_error=False)
@@ -22,7 +22,7 @@ class AuthenticatedUser(BaseModel):
 def require_authenticated_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(bearer_scheme),
 ) -> AuthenticatedUser:
-    if not credentials:
+    if credentials is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication required",
@@ -38,7 +38,9 @@ def require_authenticated_user(
             algorithms=[settings.ALGORITHM],
         )
 
-        if payload.get("type") and payload.get("type") != "access":
+        token_type = payload.get("type")
+
+        if token_type and token_type != "access":
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Access token required",
@@ -54,10 +56,20 @@ def require_authenticated_user(
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
+        role = (
+            payload.get("role")
+            or payload.get("user_role")
+            or payload.get("account_role")
+        )
+
+        role = normalize_role(role)
+
+        user_id = payload.get("user_id") or subject
+
         return AuthenticatedUser(
-            user_id=str(payload.get("user_id")) if payload.get("user_id") else None,
+            user_id=str(user_id) if user_id is not None else None,
             email=payload.get("email"),
-            role=payload.get("role"),
+            role=role,
             token_subject=str(subject),
         )
 
