@@ -19,7 +19,6 @@ class RegisterRequest(BaseModel):
             raise ValueError(
                 "Phone number must be a valid Bangladeshi mobile number. Example: 01700000000"
             )
-
         return value
 
     @field_validator("password")
@@ -27,7 +26,6 @@ class RegisterRequest(BaseModel):
     def validate_password_byte_length(cls, value: str) -> str:
         if len(value.encode("utf-8")) > 72:
             raise ValueError("Password cannot be longer than 72 bytes")
-
         return value
 
 
@@ -40,13 +38,22 @@ class LoginRequest(BaseModel):
     def validate_password_byte_length(cls, value: str) -> str:
         if len(value.encode("utf-8")) > 72:
             raise ValueError("Password cannot be longer than 72 bytes")
-
         return value
+
+
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str
 
 
 class TokenResponse(BaseModel):
     access_token: str
+    refresh_token: str
     token_type: str = "bearer"
+
+
+class TokenPairResponse(BaseModel):
+    message: str
+    data: TokenResponse
 
 
 class UserResponse(BaseModel):
@@ -56,4 +63,5 @@ class UserResponse(BaseModel):
     full_name: str
     email: str
     phone: str
+    role: str = "Customer"
     is_active: bool

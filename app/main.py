@@ -1,3 +1,5 @@
+from app.api.v1.admin_report_routes import router as admin_report_router
+from app.api.v1.admin_user_routes import router as admin_user_router
 from app.api.v1.erp_policy_routes import router as erp_policy_router
 from app.api.v1.company_document_routes import router as company_document_router
 from app.api.v1.business_ai_routes import router as business_ai_router
@@ -121,3 +123,5 @@ app.include_router(company_document_router)
 app.include_router(business_ai_router)
 app.include_router(ai_commerce_router)
 app.include_router(ai_log_router)
+app.include_router(admin_user_router)
+app.include_router(admin_report_router)

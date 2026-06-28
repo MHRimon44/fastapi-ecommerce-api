@@ -13,5 +13,6 @@ class User(SQLModel, table=True):
     phone: str = Field(index=True, max_length=20)
     password_hash: str = Field(max_length=255)
 
+    role: str = Field(default="Customer", index=True, max_length=30)
     is_active: bool = Field(default=True, index=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
