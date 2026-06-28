@@ -64,6 +64,9 @@ class Settings:
         self.AI_MODEL_NAME = os.getenv("AI_MODEL_NAME", "mock-product-writer-v1")
         self.OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
 
+        self.OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://host.docker.internal:11434")
+        self.OLLAMA_MODEL_NAME = os.getenv("OLLAMA_MODEL_NAME", "gemma3:1b")
+
         self.EMBEDDING_PROVIDER = os.getenv("EMBEDDING_PROVIDER", "mock")
         self.EMBEDDING_MODEL_NAME = os.getenv(
             "EMBEDDING_MODEL_NAME",

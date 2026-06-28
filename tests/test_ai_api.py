@@ -1,3 +1,22 @@
+import pytest
+
+from app.core.config import settings
+
+
+@pytest.fixture(autouse=True)
+def force_mock_ai_provider_for_tests():
+    original_provider = settings.AI_PROVIDER
+    original_model_name = settings.AI_MODEL_NAME
+
+    settings.AI_PROVIDER = "mock"
+    settings.AI_MODEL_NAME = "mock-product-writer-v1"
+
+    yield
+
+    settings.AI_PROVIDER = original_provider
+    settings.AI_MODEL_NAME = original_model_name
+
+
 def test_generate_product_description_success(client):
     response = client.post(
         "/ai/generate-product-description",

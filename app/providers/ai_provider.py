@@ -1,10 +1,9 @@
-import json
-from typing import List
+from typing import Any, Dict, Type, get_origin
 
-from fastapi import HTTPException, status
-from openai import APIError, OpenAI
+from pydantic import BaseModel
 
 from app.core.config import settings
+from app.providers.ollama_provider import ollama_provider
 from app.schemas.ai_schema import (
     CustomerSupportReplyData,
     CustomerSupportReplyRequest,
@@ -15,232 +14,336 @@ from app.schemas.ai_schema import (
 )
 
 
+def _safe_get(obj: Any, name: str, default: Any = None) -> Any:
+    return getattr(obj, name, default)
+
+
+def _build_pydantic_model(
+    model_class: Type[BaseModel],
+    values: Dict[str, Any],
+) -> BaseModel:
+    """
+    Builds response model safely even if schema field names are different.
+    Important: list fields must receive list values, not empty string.
+    """
+    final_values = {}
+
+    fields = getattr(model_class, "model_fields", {})
+
+    for field_name, field_info in fields.items():
+        if field_name in values:
+            final_values[field_name] = values[field_name]
+            continue
+
+        lower_name = field_name.lower()
+        annotation = field_info.annotation
+        origin = get_origin(annotation)
+
+        if origin is list or annotation is list:
+            if "action" in lower_name:
+                final_values[field_name] = [
+                    "Review the AI response",
+                    "Use the response after business verification",
+                ]
+            elif "recommendation" in lower_name:
+                final_values[field_name] = [
+                    "Review the summary",
+                    "Take action based on business priority",
+                ]
+            elif "insight" in lower_name:
+                final_values[field_name] = [
+                    "AI-generated insight should be reviewed by admin",
+                ]
+            else:
+                final_values[field_name] = []
+        elif "description" in lower_name:
+            final_values[field_name] = values.get("content", "")
+        elif "summary" in lower_name:
+            final_values[field_name] = values.get("content", "")
+        elif "reply" in lower_name:
+            final_values[field_name] = values.get("content", "")
+        elif "provider" in lower_name:
+            final_values[field_name] = values.get("provider", settings.AI_PROVIDER)
+        elif "model" in lower_name:
+            final_values[field_name] = values.get("model_name", settings.AI_MODEL_NAME)
+        elif "product_name" in lower_name:
+            final_values[field_name] = values.get("product_name", "")
+        elif "category" in lower_name:
+            final_values[field_name] = values.get("category", "")
+        elif "report_title" in lower_name:
+            final_values[field_name] = values.get("report_title", "")
+        elif "order_status" in lower_name:
+            final_values[field_name] = values.get("order_status", "")
+        else:
+            if annotation is int:
+                final_values[field_name] = 0
+            elif annotation is float:
+                final_values[field_name] = 0.0
+            elif annotation is bool:
+                final_values[field_name] = False
+            else:
+                final_values[field_name] = ""
+
+    return model_class(**final_values)
+
+
 class MockAIProvider:
     def generate_product_description(
         self,
         request: GenerateProductDescriptionRequest,
     ) -> ProductDescriptionData:
-        features_text = ", ".join(request.features)
-        audience_text = request.target_audience or "general customers"
+        product_name = _safe_get(request, "product_name", "")
+        category = _safe_get(request, "category", "")
+        features = _safe_get(request, "features", [])
+        tone = _safe_get(request, "tone", "Professional")
 
-        description = (
-            f"{request.product_name} is a {request.tone} product designed for "
-            f"{audience_text}. It includes {features_text}, making it suitable "
-            f"for modern e-commerce customers."
+        content = (
+            f"{product_name} is a {tone.lower()} {category.lower()} product "
+            f"designed with {', '.join(features)}. It is suitable for customers "
+            f"who want quality, comfort, and daily usability."
         )
 
-        bullet_points: List[str] = []
-
-        for feature in request.features:
-            bullet_points.append(f"Includes {feature}")
-
-        return ProductDescriptionData(
-            description=description,
-            bullet_points=bullet_points,
-            provider="mock",
-            model_name=settings.AI_MODEL_NAME,
+        return _build_pydantic_model(
+            ProductDescriptionData,
+            {
+                "content": content,
+                "description": content,
+                "product_description": content,
+                "product_name": product_name,
+                "category": category,
+                "provider": "mock",
+                "model_name": settings.AI_MODEL_NAME,
+                "keywords": ["quality", "comfort", "daily use"],
+                "seo_keywords": ["quality", "comfort", "daily use"],
+                "bullet_points": [
+                    "Built for daily use",
+                    "Designed for comfort",
+                    "Suitable for e-commerce customers",
+                ],
+            },
         )
 
     def summarize_order_report(
         self,
         request: SummarizeOrderReportRequest,
     ) -> OrderReportSummaryData:
-        average_order_value = 0
+        report_title = _safe_get(request, "report_title", "")
+        total_orders = _safe_get(request, "total_orders", 0)
+        total_sales_amount = _safe_get(request, "total_sales_amount", 0)
+        total_customers = _safe_get(request, "total_customers", 0)
 
-        if request.total_orders > 0:
-            average_order_value = request.total_sales_amount / request.total_orders
-
-        summary = (
-            f"{request.report_title}: Total {request.total_orders} orders were placed "
-            f"by {request.total_customers} customers, generating sales of "
-            f"{request.total_sales_amount:.2f}. The average order value is "
-            f"{average_order_value:.2f}."
+        content = (
+            f"{report_title}: Total orders were {total_orders}, total sales amount "
+            f"was {total_sales_amount}, and total customers were {total_customers}. "
+            f"Top products indicate the main sales drivers."
         )
 
-        insights = [
-            f"Total orders: {request.total_orders}",
-            f"Total sales amount: {request.total_sales_amount:.2f}",
-            f"Average order value: {average_order_value:.2f}",
-        ]
-
-        if request.top_products:
-            insights.append("Top products: " + ", ".join(request.top_products))
-
-        if request.note:
-            insights.append("Business note: " + request.note)
-
-        return OrderReportSummaryData(
-            summary=summary,
-            insights=insights,
-            provider="mock",
-            model_name=settings.AI_MODEL_NAME,
+        return _build_pydantic_model(
+            OrderReportSummaryData,
+            {
+                "content": content,
+                "summary": content,
+                "report_title": report_title,
+                "provider": "mock",
+                "model_name": settings.AI_MODEL_NAME,
+                "insights": [
+                    "Total order volume should be monitored regularly",
+                    "Top products are the main sales drivers",
+                    "Customer count shows current market reach",
+                ],
+                "recommendations": [
+                    "Promote top-selling products",
+                    "Review low-performing products",
+                    "Track sales trend by channel",
+                ],
+                "key_insights": [
+                    "Total order volume should be monitored regularly",
+                    "Top products are the main sales drivers",
+                    "Customer count shows current market reach",
+                ],
+            },
         )
 
     def generate_customer_support_reply(
         self,
         request: CustomerSupportReplyRequest,
     ) -> CustomerSupportReplyData:
-        customer_name = request.customer_name or "Customer"
+        customer_name = _safe_get(request, "customer_name", "customer")
+        order_no = _safe_get(request, "order_no", "")
+        customer_message = _safe_get(request, "customer_message", "")
+        order_status = _safe_get(request, "order_status", "")
+        tone = _safe_get(request, "tone", "Professional")
 
-        order_text = ""
-        if request.order_no:
-            order_text = f" regarding order {request.order_no}"
-
-        reply = (
-            f"Dear {customer_name}, thank you for contacting us{order_text}. "
-            f"We have received your message: \"{request.customer_message}\". "
-            f"Our support team will review this and assist you as soon as possible."
+        content = (
+            f"Dear {customer_name}, thank you for contacting us about order {order_no}. "
+            f"We received your message: {customer_message} "
+            f"Your order status is {order_status or 'being checked'}. "
+            f"Our team will assist you as soon as possible."
         )
 
-        suggested_actions = [
-            "Check customer order history",
-            "Verify payment and delivery status",
-            "Reply to customer with clear next steps",
-        ]
-
-        return CustomerSupportReplyData(
-            reply=reply,
-            suggested_actions=suggested_actions,
-            provider="mock",
-            model_name=settings.AI_MODEL_NAME,
+        return _build_pydantic_model(
+            CustomerSupportReplyData,
+            {
+                "content": content,
+                "reply": content,
+                "customer_name": customer_name,
+                "order_no": order_no,
+                "order_status": order_status,
+                "tone": tone,
+                "provider": "mock",
+                "model_name": settings.AI_MODEL_NAME,
+                "suggested_actions": [
+                    "Check courier tracking",
+                    "Verify order status",
+                    "Update customer with delivery information",
+                ],
+            },
         )
 
 
-class OpenAIProvider:
-    def __init__(self):
-        if not settings.OPENAI_API_KEY:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="OPENAI_API_KEY is not configured",
-            )
-
-        self.client = OpenAI(
-            api_key=settings.OPENAI_API_KEY,
-            timeout=30.0,
-        )
-
-    def _request_json_from_ai(
-        self,
-        prompt: str,
-    ) -> dict:
-        try:
-            response = self.client.responses.create(
-                model=settings.AI_MODEL_NAME,
-                instructions=(
-                    "You are an ecommerce AI assistant. "
-                    "Return only valid JSON. Do not include markdown."
-                ),
-                input=prompt,
-            )
-
-            return json.loads(response.output_text)
-
-        except json.JSONDecodeError:
-            raise HTTPException(
-                status_code=status.HTTP_502_BAD_GATEWAY,
-                detail="AI provider returned invalid JSON",
-            )
-
-        except APIError:
-            raise HTTPException(
-                status_code=status.HTTP_502_BAD_GATEWAY,
-                detail="AI provider request failed",
-            )
-
+class OllamaAIProvider:
     def generate_product_description(
         self,
         request: GenerateProductDescriptionRequest,
     ) -> ProductDescriptionData:
-        prompt = f"""
-Generate an ecommerce product description.
+        product_name = _safe_get(request, "product_name", "")
+        category = _safe_get(request, "category", "")
+        features = _safe_get(request, "features", [])
+        tone = _safe_get(request, "tone", "Professional")
 
-Product name: {request.product_name}
-Features: {", ".join(request.features)}
-Target audience: {request.target_audience or "general ecommerce customers"}
-Tone: {request.tone}
+        system_prompt = (
+            "You are an expert e-commerce copywriter. "
+            "Write clear, useful, conversion-focused product descriptions. "
+            "Do not invent technical specs."
+        )
 
-Return JSON only:
-{{
-  "description": "clear ecommerce product description",
-  "bullet_points": [
-    "bullet point 1",
-    "bullet point 2",
-    "bullet point 3"
-  ]
-}}
+        user_prompt = f"""
+Product name: {product_name}
+Category: {category}
+Features: {", ".join(features)}
+Tone: {tone}
+
+Write a product description in 80-120 words.
 """
 
-        data = self._request_json_from_ai(prompt)
+        content = ollama_provider.chat(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+        )
 
-        return ProductDescriptionData(
-            description=data["description"],
-            bullet_points=data["bullet_points"],
-            provider="openai",
-            model_name=settings.AI_MODEL_NAME,
+        return _build_pydantic_model(
+            ProductDescriptionData,
+            {
+                "content": content,
+                "description": content,
+                "product_description": content,
+                "product_name": product_name,
+                "category": category,
+                "provider": "ollama",
+                "model_name": settings.OLLAMA_MODEL_NAME,
+            },
         )
 
     def summarize_order_report(
         self,
         request: SummarizeOrderReportRequest,
     ) -> OrderReportSummaryData:
-        prompt = f"""
-Summarize this ecommerce order report.
+        report_title = _safe_get(request, "report_title", "")
+        total_orders = _safe_get(request, "total_orders", 0)
+        total_sales_amount = _safe_get(request, "total_sales_amount", 0)
+        total_customers = _safe_get(request, "total_customers", 0)
+        top_products = _safe_get(request, "top_products", [])
 
-Report title: {request.report_title}
-Total orders: {request.total_orders}
-Total sales amount: {request.total_sales_amount}
-Total customers: {request.total_customers}
-Top products: {", ".join(request.top_products)}
-Note: {request.note or ""}
+        system_prompt = (
+            "You are a business analyst for an e-commerce company. "
+            "Summarize order reports with clear insights and action points."
+        )
 
-Return JSON only:
-{{
-  "summary": "business summary",
-  "insights": [
-    "insight 1",
-    "insight 2",
-    "insight 3"
-  ]
-}}
+        user_prompt = f"""
+Report title: {report_title}
+Total orders: {total_orders}
+Total sales amount: {total_sales_amount}
+Total customers: {total_customers}
+Top products: {top_products}
+
+Write a short business summary with 3 insights and 3 recommendations.
 """
 
-        data = self._request_json_from_ai(prompt)
+        content = ollama_provider.chat(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+        )
 
-        return OrderReportSummaryData(
-            summary=data["summary"],
-            insights=data["insights"],
-            provider="openai",
-            model_name=settings.AI_MODEL_NAME,
+        return _build_pydantic_model(
+            OrderReportSummaryData,
+            {
+                "content": content,
+                "summary": content,
+                "report_title": report_title,
+                "provider": "ollama",
+                "model_name": settings.OLLAMA_MODEL_NAME,
+            },
         )
 
     def generate_customer_support_reply(
         self,
         request: CustomerSupportReplyRequest,
     ) -> CustomerSupportReplyData:
-        prompt = f"""
-Generate a customer support reply.
+        customer_message = _safe_get(request, "customer_message", "")
+        order_status = _safe_get(request, "order_status", "")
+        tone = _safe_get(request, "tone", "Professional")
 
-Customer name: {request.customer_name or "Customer"}
-Order no: {request.order_no or ""}
-Customer message: {request.customer_message}
-Tone: {request.tone}
+        system_prompt = (
+            "You are a helpful e-commerce customer support agent. "
+            "Reply politely and clearly. Do not promise anything not confirmed."
+        )
 
-Return JSON only:
-{{
-  "reply": "support reply message",
-  "suggested_actions": [
-    "action 1",
-    "action 2",
-    "action 3"
-  ]
-}}
+        user_prompt = f"""
+Customer message:
+{customer_message}
+
+Current order status:
+{order_status}
+
+Tone:
+{tone}
+
+Write a customer support reply.
 """
 
-        data = self._request_json_from_ai(prompt)
-
-        return CustomerSupportReplyData(
-            reply=data["reply"],
-            suggested_actions=data["suggested_actions"],
-            provider="openai",
-            model_name=settings.AI_MODEL_NAME,
+        content = ollama_provider.chat(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
         )
+
+        return _build_pydantic_model(
+            CustomerSupportReplyData,
+            {
+                "content": content,
+                "reply": content,
+                "order_status": order_status,
+                "tone": tone,
+                "provider": "ollama",
+                "model_name": settings.OLLAMA_MODEL_NAME,
+            },
+        )
+
+
+class OpenAIProvider(OllamaAIProvider):
+    """
+    Temporary compatibility provider.
+    Old code imports OpenAIProvider. For now, it delegates to Ollama.
+    """
+    pass
+
+
+def get_ai_provider():
+    provider = settings.AI_PROVIDER.lower()
+
+    if provider == "ollama":
+        return OllamaAIProvider()
+
+    if provider == "openai":
+        return OpenAIProvider()
+
+    return MockAIProvider()

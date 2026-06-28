@@ -1,7 +1,4 @@
-from fastapi import HTTPException, status
-
-from app.core.config import settings
-from app.providers.ai_provider import MockAIProvider, OpenAIProvider
+from app.providers.ai_provider import get_ai_provider
 from app.schemas.ai_schema import (
     CustomerSupportReplyData,
     CustomerSupportReplyRequest,
@@ -14,16 +11,7 @@ from app.schemas.ai_schema import (
 
 class AIService:
     def _get_provider(self):
-        if settings.AI_PROVIDER == "mock":
-            return MockAIProvider()
-
-        if settings.AI_PROVIDER == "openai":
-            return OpenAIProvider()
-
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Unsupported AI provider",
-        )
+        return get_ai_provider()
 
     def generate_product_description(
         self,
