@@ -1,20 +1,26 @@
 from logging.config import fileConfig
+import importlib
+import pkgutil
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
 
 from app.core.config import settings
-from app.models.product_model import Product
-from app.models.customer_model import Customer
-from app.models.order_model import Order, OrderItem
-from app.models.payment_model import Payment
-from app.models.voucher_model import Voucher
-from app.models.user_model import User
+import app.models
+
+
+# Import all model files so Alembic can detect SQLModel metadata.
+for module in pkgutil.iter_modules(app.models.__path__):
+    importlib.import_module(f"app.models.{module.name}")
+
 
 config = context.config
 
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+config.set_main_option(
+    "sqlalchemy.url",
+    settings.DATABASE_URL,
+)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
@@ -32,6 +38,7 @@ def run_migrations_offline() -> None:
         dialect_opts={
             "paramstyle": "named",
         },
+        compare_type=True,
     )
 
     with context.begin_transaction():
@@ -40,7 +47,7 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
+        config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
@@ -49,6 +56,7 @@ def run_migrations_online() -> None:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
+            compare_type=True,
         )
 
         with context.begin_transaction():
